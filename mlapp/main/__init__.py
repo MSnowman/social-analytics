@@ -1,7 +1,7 @@
 from flask import Flask, Blueprint
 from flask_restplus import Api
 
-from app.main.config import config_by_name
+from mlapp.main.config import config_by_name
 
 
 def create_app(config_name):

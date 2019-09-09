@@ -1,2 +1,9 @@
 pandas
 mysql-connector-python==8.0.16
+sklearn
+nltk
+pymongo
+flask_restplus
+flask
+boto3
+
