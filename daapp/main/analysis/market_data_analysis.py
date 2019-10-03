@@ -24,37 +24,38 @@ import pre_config
 
 client = pymongo.MongoClient(pre_config.mongodb_host)
 
+#This needs to be updated to work with multiple users
 # Create DB (if not already in existence)
 tweetDB = client[pre_config.tweet_db]
 # Create collection to store an
-analysis_collection = tweetDB[pre_config.analysis_collection]
+market_analysis_collection = tweetDB[pre_config.analysis_collection]
 
 # ensures each Analysis has a unique name
-analysis_collection.create_index('name', unique=True)
+market_analysis_collection.create_index('name', unique=True)
 
 
-def restore_analysis(name):
+def restore_market_analysis(name):
     """
 
     :param name: name of the analysis that is stored in the analyses collection
-    :return: a class instance of DataAnalysis
+    :return: a class instance of MarketDataAnalysis
     """
-    analysis = analysis_collection.find_one({'name': name})
+    analysis = market_analysis_collection.find_one({'name': name})
 
     if analysis is None:
         return print('No analysis exists')
     else:
-        return DataAnalysis(analysis['name'], analysis['description'], analysis['terms'])
+        return MarketDataAnalysis(analysis['name'], analysis['description'], analysis['terms'])
 
 
 def get_list_of_analyses():
     analyses = []
-    for analysis in analysis_collection.find():
+    for analysis in market_analysis_collection.find():
         analyses.append(analysis['name'])
     return analyses
 
 
-class DataAnalysis:
+class MarketDataAnalysis:
     """
     This class is created to capture a streaming analysis.
     If defines the Name, Keys and associated Terms
@@ -160,21 +161,21 @@ class DataAnalysis:
     def save_json_to_mongo(self):
         try:
             insert_file = self.create_json()
-            analysis_collection.insert_one(insert_file)
+            market_analysis_collection.insert_one(insert_file)
             self.creation_date = time.time()
         except pymongo.errors.DuplicateKeyError:
             print("The Name of your Analysis already exists.  Please rename")
 
     def delete_analysis_from_mongo(self):
         try:
-            analysis_collection.delete_one({"name": self.get_original_analysis_name()})
+            market_analysis_collection.delete_one({"name": self.get_original_analysis_name()})
         except IndexError:
             print("Noting to delete")
 
     def update_analysis_in_mongo(self):
         self.update_history()
         insert_file = self.create_json()
-        analysis_collection.replace_one({"name": self.get_original_analysis_name()}, insert_file)
+        market_analysis_collection.replace_one({"name": self.get_original_analysis_name()}, insert_file)
         self.original_analysis_name = self.get_analysis_name()
         self.version += 1
 

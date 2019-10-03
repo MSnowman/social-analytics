@@ -6,4 +6,10 @@ pymongo
 flask_restplus
 flask
 boto3
+requests
+flask_pymongo
+tweepy
+flask_bcrypt
+Flask-Bcrypt
+
 

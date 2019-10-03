@@ -105,3 +105,4 @@ venv.bak/
 .idea/codeStyles/Project.xml
 *.xml
 .idea/social-analytics.iml
+stream_errors.txt
