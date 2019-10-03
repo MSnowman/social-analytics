@@ -1,6 +1,7 @@
 import tweepy
 import boto3
 from flask import app
+from streamingapp.main.config import config_by_name
 import time
 import json
 
@@ -11,12 +12,13 @@ app
 
 class NewStreamListener(tweepy.StreamListener):
 
-    def __init__(self, user_id, topic, queue_url):
+    def __init__(self, user_id, topic, queue_url, env):
         super().__init__()
         #self.db = user_id
         self.topic = topic
         self.queue_url = queue_url
         self.queue_client = boto3.client('sqs', region_name='us-west-2')
+        self.env_config = config_by_name[env]
         #self.db = mongo.cx(database=user_id, collection=topic)
 
     def on_connect(self):
