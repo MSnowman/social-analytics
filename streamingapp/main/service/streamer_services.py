@@ -2,7 +2,6 @@ from subprocess import Popen
 from sharedUtils.processManager import ProcessManager
 import requests
 import json
-import os
 
 ANALYSIS_URL = 'http://127.0.0.1:5002/'
 
@@ -16,9 +15,10 @@ def start_stream(data):
     terms_json = json.loads(terms.text)
     search_terms = '\"' + str(terms_json['search_terms']) + '\"'
     config_key = data['config_key']
+    env = data['env']
     file_path = get_file_path()
     terms = ['nohup', 'python3', file_path, '-q', queue, '-s', search_terms, '-t', topic, '-u',
-             user_id, '-c', config_key, '&']
+             user_id, '-c', config_key, '-e', env, '&']
     print(terms)
     Popen(terms)
     return 'Stream started', 201

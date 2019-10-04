@@ -4,22 +4,23 @@ from flask import app
 from streamingapp.main.config import config_by_name
 import time
 import json
-
-print("hello")
-#print(mongo.__dict__)
-app
+import pymongo
 
 
 class NewStreamListener(tweepy.StreamListener):
 
     def __init__(self, user_id, topic, queue_url, env):
         super().__init__()
-        #self.db = user_id
-        self.topic = topic
+        self.db = user_id
+        self.collection = topic
         self.queue_url = queue_url
         self.queue_client = boto3.client('sqs', region_name='us-west-2')
         self.env_config = config_by_name[env]
-        #self.db = mongo.cx(database=user_id, collection=topic)
+
+    def mongo_connection(self):
+        mongo_uri = self.env_config['MONGO_URI']
+        client = pymongo.MongoClient[mongo_uri]
+        return client
 
     def on_connect(self):
         print("We're Connected!")
@@ -48,7 +49,8 @@ class NewStreamListener(tweepy.StreamListener):
 
     def save_to_mongo_db(self, data):
         try:
-            self.db.insert_one(data)
+            db = self.mongo_connection()
+            db[self.db][self.collection].insert_one(data)
 
         except Exception as e:
             with open('mongo_errors.txt', 'a') as file_object:

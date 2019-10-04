@@ -31,10 +31,11 @@ from streamingapp.main.service import streamer_services
 
 def start(argv):
     try:
-        opts, args = getopt.getopt(argv, "q:s:t:u:c:", ["queue=", "search_terms=", "topic=", "user_id=", "config="])
+        opts, args = getopt.getopt(argv, "q:s:t:u:c:e:", ["queue=", "search_terms=", "topic=", "user_id=", "config=",
+                                                          "env="])
     except getopt.GetoptError as err:
         print(err)
-        print('tweepyStreamApp.py -q <queue_url> -s <search_terms> -t <topic> -u <user_id> -c <config>')
+        print('tweepyStreamApp.py -q <queue_url> -s <search_terms> -t <topic> -u <user_id> -c <config> -e <env>')
         sys.exit(2)
     queue_url = None
     search_terms = None
@@ -43,7 +44,7 @@ def start(argv):
     config = None
     for opt, arg in opts:
         if opt == '-h':
-            print('tweepyStreamApp.py -q <queue_url> -s <search_terms> -t <topic> -u <user_id> -c <config>')
+            print('tweepyStreamApp.py -q <queue_url> -s <search_terms> -t <topic> -u <user_id> -c <config> -e <env>')
             sys.exit()
         elif opt in ("-q", "--queue"):
             queue_url = arg
@@ -55,6 +56,8 @@ def start(argv):
             user_id = arg
         elif opt in ("-c", "--config"):
             config = arg
+        elif opt in ("-e", "--env"):
+            env = arg
 
     print(" ")
     print(user_id)
@@ -68,7 +71,7 @@ def start(argv):
     auth.set_access_token(creds['ACCESS_TOKEN'],
                           creds['ACCESS_SECRET'])
     api = tweepy.API(auth)
-    stream_listener = NewStreamListener(queue_url=queue_url, topic=topic, user_id=user_id)
+    stream_listener = NewStreamListener(queue_url=queue_url, topic=topic, user_id=user_id, env=env)
     stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
     stream.filter(track=search_terms, languages=['en'])
 
