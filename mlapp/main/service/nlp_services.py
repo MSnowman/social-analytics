@@ -79,7 +79,7 @@ def classify_data(data):
     record_text = data['text']
     text_classifier = tc.TextClassifier(user_id, topic_name)
     text_classifier.train_classier()
-    return record_id + ' is Relevant? ' + text_classifier.is_relevant(record_text)
+    return str(record_id) + ' is Relevant? ' + text_classifier.is_relevant(record_text)
 
 
 

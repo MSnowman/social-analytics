@@ -36,7 +36,9 @@ class NewStreamListener(tweepy.StreamListener):
     def on_data(self, data):
         try:
             json_data = json.loads(data)
-            self.classify_data(json_data)
+            classification = self.classify_data(json_data)
+            print(classification)
+            print("New Data")
             # try:
             #     #response = self.queue_client.send_message(QueueUrl=self.queue_url,
             #     #                                         MessageBody=data)
@@ -46,7 +48,7 @@ class NewStreamListener(tweepy.StreamListener):
             pass
         else:
             #print(data)
-            self.save_to_mongo_db(data)
+            self.save_to_mongo_db(json_data)
 
     def classify_data(self, json_data):
         payload = {
@@ -55,9 +57,9 @@ class NewStreamListener(tweepy.StreamListener):
             'record_id': json_data['id'],
             'text': json_data['text']
         }
-        ml_app_url = self.env_config.ML_URL + 'mlapi/v1classify_data'
-        response = requests.post(ml_app_url, data=payload)
-        return response
+        ml_app_url = self.env_config.ML_URL + 'mlapi/v1/classify_data'
+        response = requests.post(ml_app_url, json=payload)
+        return response, response.json()
 
     def save_to_mongo_db(self, data):
         try:
