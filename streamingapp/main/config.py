@@ -28,7 +28,7 @@ class LocalConfig(Config):
     TWEET_ACCESS_TOKEN = tweet_config['ACCESS_TOKEN']
     TWEET_ACCESS_SECRET = tweet_config['ACCESS_SECRET']
     ANALYSIS_URL = 'http://127.0.0.1:5002/'
-    #SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:root1234@127.0.0.1:3306/Herd_Application_Data'
+    ML_URL = 'http://127.0.0.1:5000/'
 
 
 class DevelopmentConfig(Config):
@@ -52,6 +52,10 @@ class ProductionConfig(Config):
     DEBUG = False
     # uncomment the line below to use postgres
     # SQLALCHEMY_DATABASE_URI = postgres_local_base
+    ANALYSIS_URL = 'Update url for da_app'
+    MONGO_URI = 'Update URI for mongo instance'
+    ML_URL = 'Enter ML_app url'
+
 
 
 config_by_name = dict(

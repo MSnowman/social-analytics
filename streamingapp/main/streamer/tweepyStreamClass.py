@@ -1,10 +1,10 @@
 import tweepy
 import boto3
-from flask import app
 from streamingapp.main.config import config_by_name
 import time
 import json
 import pymongo
+import requests
 
 
 class NewStreamListener(tweepy.StreamListener):
@@ -18,8 +18,8 @@ class NewStreamListener(tweepy.StreamListener):
         self.env_config = config_by_name[env]
 
     def mongo_connection(self):
-        mongo_uri = self.env_config['MONGO_URI']
-        client = pymongo.MongoClient[mongo_uri]
+        mongo_uri = self.env_config.MONGO_URI
+        client = pymongo.MongoClient(mongo_uri)
         return client
 
     def on_connect(self):
@@ -35,7 +35,8 @@ class NewStreamListener(tweepy.StreamListener):
 
     def on_data(self, data):
         try:
-            data = json.loads(data)
+            json_data = json.loads(data)
+            self.classify_data(json_data)
             # try:
             #     #response = self.queue_client.send_message(QueueUrl=self.queue_url,
             #     #                                         MessageBody=data)
@@ -44,8 +45,19 @@ class NewStreamListener(tweepy.StreamListener):
         except:
             pass
         else:
-            print(data)
+            #print(data)
             self.save_to_mongo_db(data)
+
+    def classify_data(self, json_data):
+        payload = {
+            'user_id': self.db,
+            'topic_name': self.collection,
+            'record_id': json_data['id'],
+            'text': json_data['text']
+        }
+        ml_app_url = self.env_config.ML_URL + 'mlapi/v1classify_data'
+        response = requests.post(ml_app_url, data=payload)
+        return response
 
     def save_to_mongo_db(self, data):
         try:
@@ -67,3 +79,4 @@ class NewStreamListener(tweepy.StreamListener):
     def on_exception(self, exception):
         with open('stream_errors.txt', 'a') as file_object:
             file_object.write(str(exception) + "\n")
+
