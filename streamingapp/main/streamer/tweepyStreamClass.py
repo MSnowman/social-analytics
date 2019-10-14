@@ -9,13 +9,14 @@ import requests
 
 class NewStreamListener(tweepy.StreamListener):
 
-    def __init__(self, user_id, topic, queue_url, env):
+    def __init__(self, user_id, topic, queue_url, env, classify):
         super().__init__()
         self.db = user_id
         self.collection = topic
         self.queue_url = queue_url
         self.queue_client = boto3.client('sqs', region_name='us-west-2')
         self.env_config = config_by_name[env]
+        self.classify = classify
 
     def mongo_connection(self):
         mongo_uri = self.env_config.MONGO_URI
@@ -36,9 +37,10 @@ class NewStreamListener(tweepy.StreamListener):
     def on_data(self, data):
         try:
             json_data = json.loads(data)
-            classification = self.classify_data(json_data)
-            print(classification)
-            print("New Data")
+            if self.classify:
+                self.classify_data(json_data)
+            else:
+                pass
             # try:
             #     #response = self.queue_client.send_message(QueueUrl=self.queue_url,
             #     #                                         MessageBody=data)
@@ -47,7 +49,6 @@ class NewStreamListener(tweepy.StreamListener):
         except:
             pass
         else:
-            #print(data)
             self.save_to_mongo_db(json_data)
 
     def classify_data(self, json_data):
@@ -80,5 +81,5 @@ class NewStreamListener(tweepy.StreamListener):
 
     def on_exception(self, exception):
         with open('stream_errors.txt', 'a') as file_object:
-            file_object.write(str(exception) + "\n")
+            file_object.write(str(time.ctime() + exception) + "\n")
 

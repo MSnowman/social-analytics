@@ -42,3 +42,12 @@ def get_market_analysis_search_terms(user_id, analysis_name):
     temp_file = json.dumps(data, indent=4)
     search_terms = json_util.loads(temp_file)
     return search_terms
+
+
+def get_market_analysis_tickers(user_id, analysis_name):
+    market_analysis = mda.restore_market_analysis(analysis_name)
+    tickers = market_analysis.get_streaming_keys_list()
+    data = {'tickers': tickers}
+    temp_file = json.dumps(data, indent=4)
+    tickers = json_util.loads(temp_file)
+    return tickers

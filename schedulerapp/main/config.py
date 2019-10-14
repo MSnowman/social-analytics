@@ -30,6 +30,7 @@ class LocalConfig(Config):
     ANALYSIS_URL = 'http://127.0.0.1:5002/'
     ML_URL = 'http://127.0.0.1:5001/'
     STREAMER_PATH = app_config['streamer_path']
+    ALPHA_ADVANTAGE_KEY = app_config['alpha_advantage_key']
 
 
 class DevelopmentConfig(Config):

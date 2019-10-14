@@ -11,11 +11,12 @@ from ast import literal_eval
 
 def start(argv):
     try:
-        opts, args = getopt.getopt(argv, "q:s:t:u:c:e:", ["queue=", "search_terms=", "topic=", "user_id=", "config_key=",
-                                                          "env="])
+        opts, args = getopt.getopt(argv, "q:s:t:u:c:e:a:", ["queue=", "search_terms=", "topic=", "user_id=", "config_key=",
+                                                            "env=", "classify="])
     except getopt.GetoptError as err:
         print(err)
-        print('tweepyStreamApp.py -q <queue_url> -s <search_terms> -t <topic> -u <user_id> -c <config_key> -e <env>')
+        print('tweepyStreamApp.py -q <queue_url> -s <search_terms> -t <topic> -u <user_id> -c <config_key> -e <env> '
+              '-a <classify>')
         sys.exit(2)
     queue_url = None
     search_terms = None
@@ -39,7 +40,9 @@ def start(argv):
             config_key = arg
         elif opt in ("-e", "--env"):
             env = arg
-
+        elif opt in ("-a", "--classify"):
+            classify = arg
+    print(classify)
     search_terms = literal_eval(search_terms)
     search_terms = literal_eval(search_terms)
 
@@ -51,7 +54,7 @@ def start(argv):
     auth.set_access_token(creds['ACCESS_TOKEN'],
                           creds['ACCESS_SECRET'])
     api = tweepy.API(auth)
-    stream_listener = NewStreamListener(queue_url=queue_url, topic=topic, user_id=user_id, env=env)
+    stream_listener = NewStreamListener(queue_url=queue_url, topic=topic, user_id=user_id, env=env, classify=classify)
 
     stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
     stream.filter(track=search_terms, languages=['en'])

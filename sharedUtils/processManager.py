@@ -3,7 +3,7 @@ import signal
 import os
 
 
-class ProcessManager():
+class ProcessManager:
     def __init__(self, application_path):
         self.application_path = application_path
         self.application_name = application_path.rsplit('/', 1)[-1]

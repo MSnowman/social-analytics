@@ -14,6 +14,6 @@ def create_app(config_name):
               version=1.0,
               description='A RESTful web service for Machine Learning services')
     api.add_namespace(ns_ml, path='/')
-    app.register_blueprint(api_blueprint, url_prefix='/mlapi/v1')
+    app.register_blueprint(api_blueprint, url_prefix='/ml_api/v1')
 
     return app

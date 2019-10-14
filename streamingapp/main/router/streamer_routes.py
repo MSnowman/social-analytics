@@ -10,7 +10,8 @@ stream = ns_streams.model('Streams', {
     'search_terms': fields.Integer(required=False, description='Set of Terms for Stream'),
     'config_key': fields.String(required=False, description='Name of config file in S3'),
     'env': fields.String(required=False, description="Environment variable omitted = prod"),
-    'stream_status': fields.Boolean(readOnly=True, description='Is stream running or not')
+    'stream_status': fields.Boolean(readOnly=True, description='Is stream running or not'),
+    'classify': fields.Boolean(default=False, required=False, description="Pass data to mlapp to classify")
 })
 
 
