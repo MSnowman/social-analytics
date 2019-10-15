@@ -1,7 +1,7 @@
-from schedulerapp.main.dataconnections import alpha_advantage as aa
+from batchapp.main.dataconnections import alpha_advantage as aa
 import requests
 import json
-from schedulerapp.main.config import  config_by_name
+from schedulerapp.main.config import config_by_name
 
 
 def get_stock_tickers(data):
@@ -17,7 +17,7 @@ def get_stock_tickers(data):
     return tickers
 
 
-def get_stock_prices(data):
+def get_stock_quotes(data):
     tickers = get_stock_tickers(data)
     env = data['env']
     network_configs = config_by_name[env]
