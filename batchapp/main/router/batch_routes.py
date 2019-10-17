@@ -8,17 +8,16 @@ batch = ns_batch.model('Batch', {
     'market_analysis': fields.String(required=False, description='Name of analysis for stock quote batch'),
     'env': fields.String(required=False, description="Environment variable omitted = prod"),
     'user_id': fields.String(required=False, decription="User ID Owning the Batch"),
-    'topic': fields.String(required=False, description="Topic with predefined terms to batch for' ")
 })
 
 
-@ns_batch.route('start')
+@ns_batch.route('start_stock_quote')
 class StartBatch(Resource):
-    @ns_batch.doc('start_batch')
+    @ns_batch.doc('start_stock_quote')
     @ns_batch.expect(batch, validate=True)
     @ns_batch.response(409, 'Batch not started - already running.  Stop then start.')
     def post(self):
-        """Start Batch"""
+        """Start Stock Quote Batch"""
         return batch_services.get_stock_quotes(data=ns_batch.payload)
 
 

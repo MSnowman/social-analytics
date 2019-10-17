@@ -9,8 +9,19 @@ import schedule
 import time
 #import Analysis.DataAnalysis as da#
 #import dbConnections.StockPricesToMySQL as smsql
+from schedulerapp.main import config_by_name
+import requests
+import json
 
-analysis_name = 'pjp_index'
+
+def get_stock_quotes(data):
+    configs = config_by_name[data['env']]
+    payload = data
+    batch_url = configs.BATCH_URL
+    request_url = batch_url + 'start_stock_quote'
+    requests.post(request_url, json=payload)
+
+
 
 #stock_tickers = da.restore_analysis('pjp_index')
 #stock_tickers = stock_tickers.get_streaming_keys_list()

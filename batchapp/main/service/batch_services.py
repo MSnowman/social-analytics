@@ -1,16 +1,17 @@
 from batchapp.main.dataconnections import alpha_advantage as aa
 import requests
 import json
-from schedulerapp.main.config import config_by_name
+from batchapp.main.config import config_by_name
+from batchapp.main.service import mysql_ingestion as msi
 
 
 def get_stock_tickers(data):
     env = data['env']
     usr_id = data['user_id']
-    topic = data['topic']
+    market_analysis = data['market_analysis']
     network_configs = config_by_name[env]
     da_url = network_configs.ANALYSIS_URL
-    ticker_url = da_url + 'get_market_analysis_tickers/' + usr_id + '/' + topic
+    ticker_url = da_url + 'get_market_analysis_tickers/' + usr_id + '/' + market_analysis
     results = requests.get(ticker_url)
     results_json = json.loads(results.text)
     tickers = results_json['tickers']
@@ -23,10 +24,7 @@ def get_stock_quotes(data):
     network_configs = config_by_name[env]
     alpha_key = network_configs.ALPHA_ADVANTAGE_KEY
 
-    prices = []
-
     for ticker in tickers:
-        price = aa.time_series_intraday(ticker, '1min', alpha_key)
-        prices.append(price)
+        msi.pipe_prices_to_mysql(ticker, 'USD', alpha_key)
 
-    return prices
+    return

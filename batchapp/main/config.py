@@ -27,11 +27,12 @@ class LocalConfig(Config):
     TWEET_CONSUMER_SECRET = tweet_config['CONSUMER_SECRET']
     TWEET_ACCESS_TOKEN = tweet_config['ACCESS_TOKEN']
     TWEET_ACCESS_SECRET = tweet_config['ACCESS_SECRET']
-    ANALYSIS_URL = 'http://127.0.0.1:5002/'
-    ML_URL = 'http://127.0.0.1:5001/'
+
     STREAMER_PATH = app_config['streamer_path']
     ALPHA_ADVANTAGE_KEY = app_config['alpha_advantage_key']
 
+    ANALYSIS_URL = 'http://127.0.0.1:5002/'
+    ML_URL = 'http://127.0.0.1:5001/'
 
 class DevelopmentConfig(Config):
     # uncomment the line below to use postgres
