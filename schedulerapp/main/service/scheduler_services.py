@@ -20,7 +20,6 @@ def start_stock_quote_batch_scheduler(data):
     user_id = data['user_id']
     file_path = get_file_path(data)
     terms = ['python3', file_path, '-m', market_analysis, '-f', frequency, '-u', user_id, '-e', env]
-    print(terms[2:])
     Popen(terms)
     # sqs.get_stock_quotes(data)
     return 'Stream started', 201
