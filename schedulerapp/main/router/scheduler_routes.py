@@ -4,8 +4,8 @@ from schedulerapp.main.service import scheduler_services
 ns_scheduler = Namespace('scheduler', description='Schedule Start/Stop/Health Operations')
 
 scheduler = ns_scheduler.model('Scheduler', {
-    'process_type': fields.String(required=True, description='Type of process to schedule'),
-    'process': fields.String(rquired=True, description='process of process_type to schedule'),
+    'process_type': fields.String(required=True, enum=['batch'], description='Type of process to schedule'),
+    'process': fields.String(rquired=True, enum=['stock_quotes'], description='process of process_type to schedule'),
     'market_analysis': fields.String(required=False, description='Name of analysis for stock quote scheduler'),
     'frequency': fields.String(required=False, description='Schedule frequency'),
     'env': fields.String(required=False, description="Environment variable omitted = prod"),
