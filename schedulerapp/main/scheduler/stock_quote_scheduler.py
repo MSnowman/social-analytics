@@ -7,48 +7,62 @@ instance which runs on GMT time therefor the schedules below are set to 08:01 an
 """
 import schedule
 import time
-#import Analysis.DataAnalysis as da#
-#import dbConnections.StockPricesToMySQL as smsql
 from schedulerapp.main import config_by_name
 import requests
-import json
+import sys
+import getopt
 
 
-def get_stock_quotes(data):
-    configs = config_by_name[data['env']]
-    payload = data
+def get_batch_request_details(argv):
+    try:
+        opts, args = getopt.getopt(argv, "m:f:u:e:", ["market_analysis=", "frequency=", "user_id=", "env="])
+    except getopt.GetoptError as err:
+        print(err)
+        print('tweepyStreamApp.py -m <market_analysis> -f <frequency> -u <user_id> -e <env>')
+        sys.exit(2)
+    market_analysis = None
+    frequency = None
+    user_id = None
+    env = None
+    for opt, arg in opts:
+        if opt == '-h':
+            print('tweepyStreamApp.py -m <market_analysis> -f <frequency> -u <user_id> -e <env>')
+            sys.exit()
+        elif opt in ("-m", "--market_analysis"):
+            market_analysis = arg
+        elif opt in ("-f", "--frequency"):
+            frequency = arg
+        elif opt in ("-u", "--user_id"):
+            user_id = arg
+        elif opt in ("-e", "--env"):
+            env = arg
+
+    configs = config_by_name[env]
+    payload = {'process': 'stock_quotes',
+               'market_analysis': market_analysis,
+               'env': env,
+               'user_id': user_id}
+
     batch_url = configs.BATCH_URL
-    request_url = batch_url + 'start_stock_quote'
-    requests.post(request_url, json=payload)
+    batch_request_url = batch_url + 'start_stock_quote'
+    return batch_request_url, payload, frequency
 
 
-
-#stock_tickers = da.restore_analysis('pjp_index')
-#stock_tickers = stock_tickers.get_streaming_keys_list()
-
-
-# def stock_price_job(tickers=stock_tickers):
-#     error_count = 0
-#     for ticker in tickers:
-#         if error_count < 5:
-#             try:
-#                 smsql.pipe_prices_to_mysql(ticker, 'USD')
-#             except:
-#                 error_count += 1
-#                 print("There has been an error")
-#                 smsql.pipe_prices_to_mysql(ticker, 'USD')
-#
-#
-# schedule.every().monday.at("08:01").do(stock_price_job)
-# schedule.every().tuesday.at("08:01").do(stock_price_job)
-# schedule.every().wednesday.at("08:01").do(stock_price_job)
-# schedule.every().thursday.at("08:01").do(stock_price_job)
-# schedule.every().friday.at("08:01").do(stock_price_job)
-#
-#
-# while True:
-#     schedule.run_pending()
-#     time.sleep(1)
+if __name__ == "__main__":
+    batch_details = get_batch_request_details(sys.argv[1:])
+    request_url = batch_details[0]
+    request_payload = batch_details[1]
 
 
+    def request_batch(url=request_url, payload=request_payload):
+        requests.post(url, json=payload)
 
+    schedule.every().monday.at("16:01").do(request_batch)
+    schedule.every().tuesday.at("16:01").do(request_batch)
+    schedule.every().wednesday.at("16:01").do(request_batch)
+    schedule.every().thursday.at("16:01").do(request_batch)
+    schedule.every().friday.at("16:01").do(request_batch)
+
+    while True:
+        schedule.run_pending()
+        time.sleep(1)

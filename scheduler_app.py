@@ -3,7 +3,7 @@ import os
 from schedulerapp.main import create_app
 
 #app = create_app(os.getenv('BOILERPLATE_ENV') or 'dev')
-app = create_app('dev')
+app = create_app('loc')
 
 
 if __name__ == '__main__':

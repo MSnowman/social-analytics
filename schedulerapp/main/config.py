@@ -30,11 +30,11 @@ class LocalConfig(Config):
 
     STREAMER_PATH = app_config['streamer_path']
     ALPHA_ADVANTAGE_KEY = app_config['alpha_advantage_key']
+    STOCK_QUOTE_SCHEDULER_PATH = app_config['stock_quote_scheduler_path']
 
     ANALYSIS_URL = 'http://127.0.0.1:5002/'
     BATCH_URL = 'http://127.0.0.1:5005/batch_api/v1/'
     ML_URL = 'http://127.0.0.1:5001/'
-
 
 
 class DevelopmentConfig(Config):
@@ -61,7 +61,6 @@ class ProductionConfig(Config):
     ANALYSIS_URL = 'Update url for da_app'
     MONGO_URI = 'Update URI for mongo instance'
     ML_URL = 'Enter ML_app url'
-
 
 
 config_by_name = dict(
