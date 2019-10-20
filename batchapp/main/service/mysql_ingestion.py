@@ -13,13 +13,6 @@ import pre_config
 from batchapp.main.config import config_by_name
 from batchapp.main import db_scripts
 
-# Create MySQL connection
-# cnx = mysql.connector.connect(user=pre_config.mysql_user, password=pre_config.mysql_password,
-#                               host=pre_config.mysql_host,
-#                               database=pre_config.mysql_database)
-# mycursor = cnx.cursor()
-
-#db_scripts.
 
 intraday_intervals = aa.intervalTypes
 
@@ -107,13 +100,13 @@ def pipe_1m_prices_to_mysql(ticker, ccy, alpha_key, database, env):
     print('1 minute prices imported into SQL')
 
 
-def pipe_5m_prices_to_mysql(ticker, ccy, alpha_key, databse, env):
-    pipe_prices_to_mysql(ticker, ccy, alpha_key, databse, env , '5min')
+def pipe_5m_prices_to_mysql(ticker, ccy, alpha_key, database, env):
+    pipe_prices_to_mysql(ticker, ccy, alpha_key, database, env , '5min')
     print('5 minute prices imported into SQL')
 
 
-def pipe_15m_prices_to_mysql(ticker, ccy, alpha_key, databse, env):
-    pipe_prices_to_mysql(ticker, ccy, alpha_key, databse, env, '15min')
+def pipe_15m_prices_to_mysql(ticker, ccy, alpha_key, database, env):
+    pipe_prices_to_mysql(ticker, ccy, alpha_key, database, env, '15min')
     print('15 minute prices imported into SQL')
 
 
