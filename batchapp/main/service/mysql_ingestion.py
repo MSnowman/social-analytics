@@ -9,9 +9,7 @@ Module pipes ingested stock market data into a MySQL database table
 from batchapp.main.dataconnections import alpha_advantage as aa
 import mysql.connector
 import time
-import pre_config
 from batchapp.main.config import config_by_name
-from batchapp.main import db_scripts
 
 
 intraday_intervals = aa.intervalTypes
