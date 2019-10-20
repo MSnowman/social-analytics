@@ -34,6 +34,14 @@ class LocalConfig(Config):
     ANALYSIS_URL = 'http://127.0.0.1:5002/'
     ML_URL = 'http://127.0.0.1:5001/'
 
+    MYSQL_USER = app_config['mysql_user']
+    MYSQL_PASSWORD = app_config['mysql_password']
+    MYSQL_HOST = app_config['mysql_host']
+    MYSQL_DATABASE = app_config['mysql_database']
+
+    create_stock_price_table_path = "/Users/michaelsnow/PycharmProjects/GitHUB/social-analytics/batchapp/main/db_scripts/create_stock_price_table.sql"
+
+
 class DevelopmentConfig(Config):
     # uncomment the line below to use postgres
     # SQLALCHEMY_DATABASE_URI = postgres_local_base

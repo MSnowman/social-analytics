@@ -21,10 +21,11 @@ def get_stock_tickers(data):
 def get_stock_quotes(data):
     tickers = get_stock_tickers(data)
     env = data['env']
+    usr_id = data['user_id']
     network_configs = config_by_name[env]
     alpha_key = network_configs.ALPHA_ADVANTAGE_KEY
 
     for ticker in tickers:
-        msi.pipe_prices_to_mysql(ticker, 'USD', alpha_key)
+        msi.pipe_prices_to_mysql(ticker, 'USD', alpha_key, usr_id, env)
 
     return

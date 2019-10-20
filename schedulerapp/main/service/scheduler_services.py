@@ -1,6 +1,7 @@
 from schedulerapp.main.scheduler import stock_quote_scheduler as sqs
 from schedulerapp.main import config_by_name
 from subprocess import Popen
+from sharedUtils.processManager import ProcessManager
 
 
 def start_schedule(data):
@@ -26,7 +27,11 @@ def start_stock_quote_batch_scheduler(data):
 
 
 def stop_stock_quote_scheduler(data):
-    return
+    user_id = data['user_id']
+    file_path = get_file_path(data)
+    manager = ProcessManager(file_path)
+    manager.kill()
+    return 'Stream stopped', 201
 
 
 def get_file_path(data):
