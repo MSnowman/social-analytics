@@ -1,5 +1,6 @@
 import os
 import json
+import boto3
 
 # uncomment the line below for postgres database url from environment variable
 # postgres_local_base = os.environ['DATABASE_URL']

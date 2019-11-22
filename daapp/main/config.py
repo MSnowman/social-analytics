@@ -1,4 +1,7 @@
 import os
+import json
+import boto3
+from botocore.exceptions import ClientError
 
 # uncomment the line below for postgres database url from environment variable
 # postgres_local_base = os.environ['DATABASE_URL']
@@ -11,14 +14,25 @@ class Config:
     DEBUG = False
 
 
+class LocalConfig(Config):
+    # For testing on on local machine
+    DEBUG = True
+    config_path = "/Users/michaelsnow/PycharmProjects/ApplicationKeys/AnalysisDataPipelineServicesconfig.JSON"
+    tweet_creds = "/Users/michaelsnow/PycharmProjects/ApplicationKeys/Twitterkeys.JSON"
+    with open(config_path, "r") as file:
+        app_config = json.load(file)
+
+    MONGO_URI = app_config['mongodb_host']
+
+
 class DevelopmentConfig(Config):
     # uncomment the line below to use postgres
     # SQLALCHEMY_DATABASE_URI = postgres_local_base
+    ENV = 'development'
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:root1234@127.0.0.1:3306/Herd_Application_Data'
     SQLALCHEMY_ECHO = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-
 
 
 class TestingConfig(Config):
@@ -30,15 +44,35 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
+    """AWS S3 Configurations"""
+    try:
+        s3 = boto3.client('s3')
+        s3_bucket_name = 'social-config'
+        config_key = 'Social-configs.JSON'
+        s3_config_object = s3.get_object(Bucket=s3_bucket_name, Key=config_key)
+        config_file = s3_config_object['Body'].read().decode('utf-8')
+        app_config = json.loads(config_file)
+
+        MONGO_URI = app_config['mongodb_host']
+
+    except ClientError as e:
+        print("Client Error on AWS connecting to S3. Expected if running local.")
+
     DEBUG = False
+
+
+
     # uncomment the line below to use postgres
     # SQLALCHEMY_DATABASE_URI = postgres_local_base
 
 
 config_by_name = dict(
+    loc=LocalConfig,
     dev=DevelopmentConfig,
     test=TestingConfig,
     prod=ProductionConfig
 )
 
 key = Config.SECRET_KEY
+
+config_vars = config_by_name[os.getenv('BOILERPLATE_ENV')]

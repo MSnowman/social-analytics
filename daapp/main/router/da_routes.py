@@ -14,7 +14,9 @@ market_data_analysis = ns_da.model('MarketDataAnalysis', {
     'analysis_name': fields.String(required=True, description='Name of the analysis'),
     'analysis_description': fields.String(required=True, description='Description of the analysis'),
     'analysis_terms': fields.Nested(required=True, model=listed_security, description='Dictionary of {Ticker:'
-                                                                                      '[description/terms]}')
+                                                                                      '[description/terms]}'),
+    'env': fields.String(required=False, description="Environment variable omitted = prod"),
+
 })
 
 
@@ -65,6 +67,8 @@ class GetMarketAnalysisTickers(Resource):
     def get(self, user_id, analysis_name):
         """Get a list of tickers associated with the market analysis"""
         return da_services.get_market_analysis_tickers(user_id, analysis_name)
+
+
 
 
 

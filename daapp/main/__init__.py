@@ -14,6 +14,6 @@ def create_app(config_name):
               version=1.0,
               description='A RESTful web service for create data sets to analyze')
     api.add_namespace(ns_da, path='/')
-    app.register_blueprint(api_blueprint, url_pref='/analysis/v1')
+    app.register_blueprint(api_blueprint, url_prefix='/analysis/v1')
 
     return app

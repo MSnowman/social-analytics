@@ -12,5 +12,5 @@ tweepy
 flask_bcrypt
 Flask-Bcrypt
 schedule
-
+boto3
 

@@ -19,16 +19,15 @@ import json
 from bson import json_util
 import pymongo
 import time
-import pre_config
+from daapp.main.config import config_vars
 
 
-client = pymongo.MongoClient(pre_config.mongodb_host)
-
+client = pymongo.MongoClient(config_vars.MONGO_URI)
 #This needs to be updated to work with multiple users
 # Create DB (if not already in existence)
-tweetDB = client[pre_config.tweet_db]
+tweetDB = client['tweet_database']
 # Create collection to store an
-market_analysis_collection = tweetDB[pre_config.analysis_collection]
+market_analysis_collection = tweetDB["analyses"]
 
 # ensures each Analysis has a unique name
 market_analysis_collection.create_index('name', unique=True)
