@@ -1,6 +1,6 @@
 import os
 
-os.environ["BOILERPLATE_ENV"] = "loc"
+os.environ["BOILERPLATE_ENV"] = "prod"
 
 
 from daapp.main import create_app
