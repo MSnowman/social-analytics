@@ -55,7 +55,7 @@ class ProductionConfig(Config):
 
         MONGO_URI = app_config['mongodb_host']
 
-    except ClientError as e:
+    except:
         print("Client Error on AWS connecting to S3. Expected if running local.")
 
     DEBUG = False
