@@ -44,7 +44,7 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
-    """AWS S3 Configurations"""
+    """AWS S3 Configurations    """
     try:
         s3 = boto3.client('s3')
         s3_bucket_name = 'social-config'
