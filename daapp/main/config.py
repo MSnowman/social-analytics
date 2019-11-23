@@ -29,8 +29,6 @@ class LocalConfig(Config):
         print('Local App Config file not found')
 
 
-
-
 class DevelopmentConfig(Config):
     # uncomment the line below to use postgres
     # SQLALCHEMY_DATABASE_URI = postgres_local_base
@@ -80,4 +78,4 @@ config_by_name = dict(
 
 key = Config.SECRET_KEY
 
-config_vars = config_by_name[os.getenv('BOILERPLATE_ENV')]
+config_vars = config_by_name[os.getenv('BOILERPLATE_ENV') or 'loc']
