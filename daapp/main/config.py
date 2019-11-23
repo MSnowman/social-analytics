@@ -16,6 +16,7 @@ class Config:
 
 class LocalConfig(Config):
     # For testing on on local machine
+    ENVIRONMENT = 'local'
     DEBUG = True
     try:
         config_path = "/Users/michaelsnow/PycharmProjects/ApplicationKeys/AnalysisDataPipelineServicesconfig.JSON"
@@ -25,7 +26,7 @@ class LocalConfig(Config):
 
         MONGO_URI = app_config['mongodb_host']
     except FileNotFoundError as e:
-        print(e, 'App Config file not found')
+        print('Local App Config file not found')
 
 
 
@@ -50,6 +51,7 @@ class TestingConfig(Config):
 
 class ProductionConfig(Config):
     """AWS S3 Configurations    """
+    ENVIRONMENT = 'production'
     try:
         s3 = boto3.client('s3')
         s3_bucket_name = 'social-config'
