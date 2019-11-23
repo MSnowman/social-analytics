@@ -16,7 +16,7 @@ class Config:
 
 class LocalConfig(Config):
     # For testing on on local machine
-    ENVIRONMENT = 'local'
+    ENV = 'local'
     DEBUG = True
     try:
         config_path = "/Users/michaelsnow/PycharmProjects/ApplicationKeys/AnalysisDataPipelineServicesconfig.JSON"
@@ -49,7 +49,7 @@ class TestingConfig(Config):
 
 class ProductionConfig(Config):
     """AWS S3 Configurations    """
-    ENVIRONMENT = 'production'
+    ENV = 'production'
     try:
         s3 = boto3.client('s3')
         s3_bucket_name = 'social-config'
