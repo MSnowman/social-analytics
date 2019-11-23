@@ -22,10 +22,12 @@ class LocalConfig(Config):
         tweet_creds = "/Users/michaelsnow/PycharmProjects/ApplicationKeys/Twitterkeys.JSON"
         with open(config_path, "r") as file:
             app_config = json.load(file)
-    except FileNotFoundError as e:
-        app_config = {}
 
-    MONGO_URI = app_config['mongodb_host']
+        MONGO_URI = app_config['mongodb_host']
+    except FileNotFoundError as e:
+        print(e, 'App Config file not found')
+
+
 
 
 class DevelopmentConfig(Config):
@@ -56,14 +58,12 @@ class ProductionConfig(Config):
         config_file = s3_config_object['Body'].read().decode('utf-8')
         app_config = json.loads(config_file)
 
+        MONGO_URI = app_config['mongodb_host']
+
     except ClientError as e:
         print(e, "Client Error on AWS connecting to S3. Expected if running local.")
-        app_config = {}
 
     DEBUG = False
-    MONGO_URI = app_config['mongodb_host']
-
-
 
     # uncomment the line below to use postgres
     # SQLALCHEMY_DATABASE_URI = postgres_local_base
