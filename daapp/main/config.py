@@ -17,10 +17,13 @@ class Config:
 class LocalConfig(Config):
     # For testing on on local machine
     DEBUG = True
-    config_path = "/Users/michaelsnow/PycharmProjects/ApplicationKeys/AnalysisDataPipelineServicesconfig.JSON"
-    tweet_creds = "/Users/michaelsnow/PycharmProjects/ApplicationKeys/Twitterkeys.JSON"
-    with open(config_path, "r") as file:
-        app_config = json.load(file)
+    try:
+        config_path = "/Users/michaelsnow/PycharmProjects/ApplicationKeys/AnalysisDataPipelineServicesconfig.JSON"
+        tweet_creds = "/Users/michaelsnow/PycharmProjects/ApplicationKeys/Twitterkeys.JSON"
+        with open(config_path, "r") as file:
+            app_config = json.load(file)
+    except FileNotFoundError as e:
+        app_config = {}
 
     MONGO_URI = app_config['mongodb_host']
 
@@ -53,12 +56,12 @@ class ProductionConfig(Config):
         config_file = s3_config_object['Body'].read().decode('utf-8')
         app_config = json.loads(config_file)
 
-        MONGO_URI = app_config['mongodb_host']
-
-    except:
-        print("Client Error on AWS connecting to S3. Expected if running local.")
+    except ClientError as e:
+        print(e, "Client Error on AWS connecting to S3. Expected if running local.")
+        app_config = {}
 
     DEBUG = False
+    MONGO_URI = app_config['mongodb_host']
 
 
 
