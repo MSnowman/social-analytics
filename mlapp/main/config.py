@@ -69,8 +69,7 @@ class ProductionConfig(Config):
     except ClientError as e:
         print(e, "Client Error on AWS connecting to S3. Expected if running local.")
 
-    DEBUG = False
-
+    DEBUG = True
 
 
 config_by_name = dict(
