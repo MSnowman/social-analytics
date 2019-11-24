@@ -1,7 +1,7 @@
 from mlapp.main.nlp import TrainingData as td
 from mlapp.main.nlp import TextClassifier as tc
 from mlapp.main import utilities as utils
-import pre_config
+from mlapp.main.config import config_vars
 
 
 def setup_training_data(data):
@@ -41,9 +41,9 @@ def get_classified_data(user_id, topic_name):
     return result
 
 
-# cnx credentials need to be pulled from somewhere other than pre_config.  This will need to be updated
 def get_list_training_data_topics(user_id):
-    cnx_connection = utils.my_sql_cnx(pre_config.mysql_user, pre_config.mysql_password, pre_config.mysql_host, user_id)
+    cnx_connection = utils.my_sql_cnx(config_vars.MYSQL_USER, config_vars.MYSQL_PASSWORD, config_vars.MYSQL_HOST
+                                      , user_id)
     cursor = cnx_connection.cursor()
     cursor.execute("SHOW TABLES")
     result = cursor.fetchall()

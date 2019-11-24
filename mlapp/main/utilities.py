@@ -26,14 +26,14 @@ def my_sql_cnx(user, password, host, database):
 
     try:
         cnx = mysql.connector.connect(user=user, password=password,
-                                    host=host, database=database)
+                                      host=host, database=database)
     except mysql.connector.ProgrammingError:
         cnx = mysql.connector.connect(user=user, password=password,
-                                    host=host)
+                                      host=host)
         mycursor = cnx.cursor()
-        mycursor.execute("CREATE DATABASE "+ database)
+        mycursor.execute("CREATE DATABASE " + database)
         cnx = mysql.connector.connect(user=user, password=password,
-                                    host=host, database=database)
+                                      host=host, database=database)
         pass
 
     return cnx

@@ -20,7 +20,6 @@ class LocalConfig(Config):
     DEBUG = True
     try:
         config_path = "/Users/michaelsnow/PycharmProjects/ApplicationKeys/AnalysisDataPipelineServicesconfig.JSON"
-        tweet_creds = "/Users/michaelsnow/PycharmProjects/ApplicationKeys/Twitterkeys.JSON"
         with open(config_path, "r") as file:
             app_config = json.load(file)
 

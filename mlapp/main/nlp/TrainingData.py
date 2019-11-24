@@ -6,19 +6,19 @@ where it is stored
 
 import pymongo
 from mlapp.main import utilities as utils
-import pre_config
 import random
+from mlapp.main.config import config_vars
 
 #Update client to point at AWS
 client = pymongo.MongoClient()
 
 
-def define_mongo_db(group):
+def define_mongo_db(user_id):
     """
-    :param group: group or user requesting the sample data.
+    :param user_id: group or user requesting the sample data.
     :return: mongo client db object specific to group
     """
-    db = client[group]
+    db = client[user_id]
     return db
 
 
@@ -34,7 +34,6 @@ def restore_TrainingData(user, topic_name):
         print('Topic ' + topic_name + ' does not exist for user: ' + user)
 
 
-# cnx credentials need to be pulled from somewhere other than pre_config.  This will need to be updated
 class TrainingData:
     """
     Use this class to create a training data set for a NLP Classification Model
@@ -52,7 +51,7 @@ class TrainingData:
         self.creation_date = ''
         self.new_training_data = ''
         self.annotating_training_data = ''
-        self.cnx = utils.my_sql_cnx(pre_config.mysql_user, pre_config.mysql_password, pre_config.mysql_host, user)
+        self.cnx = utils.my_sql_cnx(config_vars.MYSQL_USER, config_vars.MYSQL_PASSWORD, config_vars.MYSQL_HOST, user)
         self.mongo_db = define_mongo_db(user)
 
     def __str__(self):
