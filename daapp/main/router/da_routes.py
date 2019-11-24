@@ -14,9 +14,7 @@ market_data_analysis = ns_da.model('MarketDataAnalysis', {
     'analysis_name': fields.String(required=True, description='Name of the analysis'),
     'analysis_description': fields.String(required=True, description='Description of the analysis'),
     'analysis_terms': fields.Nested(required=True, model=listed_security, description='Dictionary of {Ticker:'
-                                                                                      '[description/terms]}'),
-    'env': fields.String(required=False, description="Environment variable omitted = prod"),
-
+                                                                                      '[description/terms]}')
 })
 
 

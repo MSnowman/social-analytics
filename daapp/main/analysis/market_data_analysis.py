@@ -23,23 +23,22 @@ from daapp.main.config import config_vars
 
 
 client = pymongo.MongoClient(config_vars.MONGO_URI)
-#This needs to be updated to work with multiple users
-# Create DB (if not already in existence)
-tweetDB = client['tweet_database']
-# Create collection to store an
-market_analysis_collection = tweetDB["analyses"]
-
-# ensures each Analysis has a unique name
-market_analysis_collection.create_index('name', unique=True)
 
 
-def restore_market_analysis(name):
+def market_analysis_collection(db_name):
+    user_db = client[db_name]
+    ma_collection = user_db["analyses"]
+    ma_collection.create_index('name', unique=True)
+    return ma_collection
+
+
+def restore_market_analysis(db_name, name):
     """
-
+    :param db_name: name of the database which is the user_id
     :param name: name of the analysis that is stored in the analyses collection
     :return: a class instance of MarketDataAnalysis
     """
-    analysis = market_analysis_collection.find_one({'name': name})
+    analysis = market_analysis_collection(db_name).find_one({'name': name})
 
     if analysis is None:
         return print('No analysis exists')
@@ -47,9 +46,9 @@ def restore_market_analysis(name):
         return MarketDataAnalysis(analysis['name'], analysis['description'], analysis['terms'])
 
 
-def get_list_of_analyses():
+def get_list_of_analyses(db_name):
     analyses = []
-    for analysis in market_analysis_collection.find():
+    for analysis in market_analysis_collection(db_name).find():
         analyses.append(analysis['name'])
     return analyses
 
@@ -61,11 +60,12 @@ class MarketDataAnalysis:
     It also creates the Collection in Which the Tweets will be saved
 
     """
-    def __init__(self, analysis_name, analysis_description, streaming_terms={}):
+    def __init__(self, db_name, analysis_name, analysis_description, streaming_terms={}):
         self.streaming_terms = streaming_terms
         self.original_analysis_name = analysis_name.lower()
         self.analysis_name = analysis_name.lower()
         self.analysis_description = analysis_description
+        self.db_name = db_name
         self.collection_name = analysis_name.lower()
         self.creation_date = ''
         self.version = 1
@@ -147,7 +147,7 @@ class MarketDataAnalysis:
 
     def create_mongo_collection(self):
         collection_name = self.collection_name
-        collection = tweetDB.create_collection(collection_name)
+        collection = client[self.db_name].create_collection(collection_name)
         return collection
 
     def create_json(self):
@@ -160,21 +160,21 @@ class MarketDataAnalysis:
     def save_json_to_mongo(self):
         try:
             insert_file = self.create_json()
-            market_analysis_collection.insert_one(insert_file)
+            market_analysis_collection(self.db_name).insert_one(insert_file)
             self.creation_date = time.time()
         except pymongo.errors.DuplicateKeyError:
             print("The Name of your Analysis already exists.  Please rename")
 
     def delete_analysis_from_mongo(self):
         try:
-            market_analysis_collection.delete_one({"name": self.get_original_analysis_name()})
+            market_analysis_collection(self.db_name).delete_one({"name": self.get_original_analysis_name()})
         except IndexError:
             print("Noting to delete")
 
     def update_analysis_in_mongo(self):
         self.update_history()
         insert_file = self.create_json()
-        market_analysis_collection.replace_one({"name": self.get_original_analysis_name()}, insert_file)
+        market_analysis_collection(self.db_name).replace_one({"name": self.get_original_analysis_name()}, insert_file)
         self.original_analysis_name = self.get_analysis_name()
         self.version += 1
 
