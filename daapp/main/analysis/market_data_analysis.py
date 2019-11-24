@@ -43,7 +43,7 @@ def restore_market_analysis(db_name, name):
     if analysis is None:
         return print('No analysis exists')
     else:
-        return MarketDataAnalysis(analysis['name'], analysis['description'], analysis['terms'])
+        return MarketDataAnalysis(db_name, analysis['name'], analysis['description'], analysis['terms'])
 
 
 def get_list_of_analyses(db_name):
