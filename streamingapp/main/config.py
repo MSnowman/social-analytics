@@ -26,14 +26,14 @@ class LocalConfig(Config):
             tweet_config = json.loads(file2.read())
 
         MONGO_URI = app_config['mongodb_host']
+        ANALYSIS_URL = app_config["ANALYSIS_URL"]
+        ML_URL = app_config["ML_URL"]
+        STREAMER_PATH = app_config['streamer_path']
+
         TWEET_CONSUMER_KEY = tweet_config['CONSUMER_KEY']
         TWEET_CONSUMER_SECRET = tweet_config['CONSUMER_SECRET']
         TWEET_ACCESS_TOKEN = tweet_config['ACCESS_TOKEN']
         TWEET_ACCESS_SECRET = tweet_config['ACCESS_SECRET']
-
-        ANALYSIS_URL = 'http://127.0.0.1:5002/analysis_api/v1/'
-        ML_URL = 'http://127.0.0.1:5001/'
-        STREAMER_PATH = app_config['streamer_path']
 
     except FileNotFoundError as e:
         print('Local App Config file not found')
