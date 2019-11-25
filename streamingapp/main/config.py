@@ -15,6 +15,7 @@ class Config:
 
 
 class LocalConfig(Config):
+    # For testing on on local machine
     ENV = 'local'
     try:
         path = "/Users/michaelsnow/PycharmProjects/ApplicationKeys/AnalysisDataPipelineServicesconfig.JSON"
@@ -69,7 +70,6 @@ class ProductionConfig(Config):
 
         MONGO_URI = app_config['mongodb_host']
         ANALYSIS_URL = app_config['ANALYSIS_URL']
-        ML_URL = app_config['ML_URL']
         STREAMER_PATH = app_config["STREAMER_PATH"]
 
         TWEET_CONSUMER_KEY = app_config['CONSUMER_KEY']

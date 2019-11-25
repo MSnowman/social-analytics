@@ -6,7 +6,6 @@ ns_batch = Namespace('batch', description='batch Start/Stop/Health Operations')
 batch = ns_batch.model('Batch', {
     'process': fields.String(required=True, enum=['stock_quotes'], description='Process to batch'),
     'market_analysis': fields.String(required=False, description='Name of analysis for stock quote batch'),
-    'env': fields.String(required=False, description="Environment variable omitted = prod"),
     'user_id': fields.String(required=False, decription="User ID Owning the Batch"),
 })
 

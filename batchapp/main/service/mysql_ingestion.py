@@ -9,7 +9,7 @@ Module pipes ingested stock market data into a MySQL database table
 from batchapp.main.dataconnections import alpha_advantage as aa
 import mysql.connector
 import time
-from batchapp.main.config import config_by_name
+from batchapp.main.config import config_vars
 
 
 intraday_intervals = aa.intervalTypes
@@ -23,12 +23,11 @@ def mysql_connection(user_id, password, host, database):
     return cnx
 
 
-def pipe_prices_to_mysql(ticker, ccy, alpha_key, database, env, interval='1min'):
+def pipe_prices_to_mysql(ticker, ccy, alpha_key, database, interval='1min'):
 
-    network_configs = config_by_name[env]
-    user_id = network_configs.MYSQL_USER
-    password = network_configs.MYSQL_PASSWORD
-    host = network_configs.MYSQL_HOST
+    user_id = config_vars.MYSQL_USER
+    password = config_vars.MYSQL_PASSWORD
+    host = config_vars.MYSQL_HOST
     database = database
 
     cnx = mysql_connection(user_id, password, host, database)
@@ -42,13 +41,13 @@ def pipe_prices_to_mysql(ticker, ccy, alpha_key, database, env, interval='1min')
         print(ticker + ' key error.  sleeping for 60 seconds')
         print(prices)
         time.sleep(60)
-        pipe_prices_to_mysql(ticker, ccy, alpha_key, interval='1min', database=database, env=env)
+        pipe_prices_to_mysql(ticker, ccy, alpha_key, interval='1min', database=database)
         return
 
     except ConnectionError:
         print(ticker + ' connection error.  sleeping for 1 seconds')
         time.sleep(1)
-        pipe_prices_to_mysql(ticker, ccy, alpha_key, interval='1min', database=database, env=env)
+        pipe_prices_to_mysql(ticker, ccy, alpha_key, interval='1min', database=database)
         return
 
     print("importing " + ticker + "....")
@@ -82,7 +81,7 @@ def pipe_prices_to_mysql(ticker, ccy, alpha_key, database, env, interval='1min')
             pass
 
         except mysql.connector.errors.ProgrammingError:
-            with open(network_configs.create_stock_price_table_path) as f:
+            with open(config_vars.create_stock_price_table_path) as f:
                 my_cursor.execute(f.read(), multi=True)
                 my_cursor.execute(sql, val)
                 cnx.commit()
@@ -93,26 +92,26 @@ def pipe_prices_to_mysql(ticker, ccy, alpha_key, database, env, interval='1min')
     return print(count)
 
 
-def pipe_1m_prices_to_mysql(ticker, ccy, alpha_key, database, env):
-    pipe_prices_to_mysql(ticker, ccy, alpha_key, database, env, '1min')
+def pipe_1m_prices_to_mysql(ticker, ccy, alpha_key, database):
+    pipe_prices_to_mysql(ticker, ccy, alpha_key, database, '1min')
     print('1 minute prices imported into SQL')
 
 
-def pipe_5m_prices_to_mysql(ticker, ccy, alpha_key, database, env):
-    pipe_prices_to_mysql(ticker, ccy, alpha_key, database, env , '5min')
+def pipe_5m_prices_to_mysql(ticker, ccy, alpha_key, database):
+    pipe_prices_to_mysql(ticker, ccy, alpha_key, database, '5min')
     print('5 minute prices imported into SQL')
 
 
-def pipe_15m_prices_to_mysql(ticker, ccy, alpha_key, database, env):
-    pipe_prices_to_mysql(ticker, ccy, alpha_key, database, env, '15min')
+def pipe_15m_prices_to_mysql(ticker, ccy, alpha_key, database):
+    pipe_prices_to_mysql(ticker, ccy, alpha_key, database, '15min')
     print('15 minute prices imported into SQL')
 
 
-def pipe_30m_prices_to_mysql(ticker, ccy, alpha_key, database, env):
-    pipe_prices_to_mysql(ticker, ccy, alpha_key, database, env, '30min')
+def pipe_30m_prices_to_mysql(ticker, ccy, alpha_key, database):
+    pipe_prices_to_mysql(ticker, ccy, alpha_key, database, '30min')
     print('30 minute prices imported into SQL')
 
 
-def pipe_60m_prices_to_mysql(ticker, ccy, alpha_key, database, env):
-    pipe_prices_to_mysql(ticker, ccy, alpha_key, database, env, '60min')
+def pipe_60m_prices_to_mysql(ticker, ccy, alpha_key, database):
+    pipe_prices_to_mysql(ticker, ccy, alpha_key, database, '60min')
     print('60 minute prices imported into SQL')

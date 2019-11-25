@@ -50,6 +50,7 @@ class TestingConfig(Config):
 class ProductionConfig(Config):
     """AWS S3 Configurations    """
     ENV = 'production'
+    DEBUG = False
     try:
         s3 = boto3.client('s3')
         s3_bucket_name = 'social-config'
@@ -62,8 +63,6 @@ class ProductionConfig(Config):
 
     except ClientError as e:
         print(e, "Client Error on AWS connecting to S3. Expected if running local.")
-
-    DEBUG = False
 
     # uncomment the line below to use postgres
     # SQLALCHEMY_DATABASE_URI = postgres_local_base

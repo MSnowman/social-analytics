@@ -1,5 +1,7 @@
 import os
 import json
+import boto3
+from botocore.exceptions import ClientError
 
 # uncomment the line below for postgres database url from environment variable
 # postgres_local_base = os.environ['DATABASE_URL']
@@ -14,27 +16,27 @@ class Config:
 
 class LocalConfig(Config):
     # For testing on on local machine
-    path = "/Users/michaelsnow/PycharmProjects/ApplicationKeys/AnalysisDataPipelineServicesconfig.JSON"
-    tweet_creds = "/Users/michaelsnow/PycharmProjects/ApplicationKeys/Twitterkeys.JSON"
-    with open(path, "r") as file:
-        app_config = json.load(file)
+    ENV = 'local'
+    DEBUG = True
+    try:
+        path = "/Users/michaelsnow/PycharmProjects/ApplicationKeys/AnalysisDataPipelineServicesconfig.JSON"
+        tweet_creds = "/Users/michaelsnow/PycharmProjects/ApplicationKeys/Twitterkeys.JSON"
+        with open(path, "r") as file:
+            app_config = json.load(file)
 
-    with open(tweet_creds, "r") as file2:
-        tweet_config = json.loads(file2.read())
+        with open(tweet_creds, "r") as file2:
+            tweet_config = json.loads(file2.read())
 
-    MONGO_URI = app_config['mongodb_host']
-    TWEET_CONSUMER_KEY = tweet_config['CONSUMER_KEY']
-    TWEET_CONSUMER_SECRET = tweet_config['CONSUMER_SECRET']
-    TWEET_ACCESS_TOKEN = tweet_config['ACCESS_TOKEN']
-    TWEET_ACCESS_SECRET = tweet_config['ACCESS_SECRET']
+        MONGO_URI = app_config['mongodb_host']
+        ANALYSIS_URL = app_config['ANALYSIS_URL']
+        BATCH_URL = app_config['BATCH_URL']
+        ML_URL = app_config['ML_URL']
 
-    STREAMER_PATH = app_config['streamer_path']
-    ALPHA_ADVANTAGE_KEY = app_config['alpha_advantage_key']
-    STOCK_QUOTE_SCHEDULER_PATH = app_config['stock_quote_scheduler_path']
+        ALPHA_ADVANTAGE_KEY = app_config['alpha_advantage_key']
+        STOCK_QUOTE_SCHEDULER_PATH = app_config['stock_quote_scheduler_path']
 
-    ANALYSIS_URL = 'http://127.0.0.1:5002/'
-    BATCH_URL = 'http://127.0.0.1:5005/batch_api/v1/'
-    ML_URL = 'http://127.0.0.1:5001/'
+    except FileNotFoundError as e:
+        print('Local App Config file not found')
 
 
 class DevelopmentConfig(Config):
@@ -55,12 +57,29 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
+    """AWS S3 Configurations    """
+    ENV = 'production'
     DEBUG = False
+    try:
+        s3 = boto3.client('s3')
+        s3_bucket_name = 'social-config'
+        config_key = 'Social-configs.JSON'
+        s3_config_object = s3.get_object(Bucket=s3_bucket_name, Key=config_key)
+        config_file = s3_config_object['Body'].read().decode('utf-8')
+        app_config = json.loads(config_file)
+
+        MONGO_URI = app_config['mongodb_host']
+        ANALYSIS_URL = app_config['ANALYSIS_URL']
+        BATCH_URL = app_config['BATCH_URL']
+        ML_URL = app_config['ML_URL']
+
+        ALPHA_ADVANTAGE_KEY = app_config['alpha_advantage_key']
+        STOCK_QUOTE_SCHEDULER_PATH = app_config['stock_quote_scheduler_path']
+
+    except ClientError as e:
+        print(e, "Client Error on AWS connecting to S3. Expected if running local.")
     # uncomment the line below to use postgres
     # SQLALCHEMY_DATABASE_URI = postgres_local_base
-    ANALYSIS_URL = 'Update url for da_app'
-    MONGO_URI = 'Update URI for mongo instance'
-    ML_URL = 'Enter ML_app url'
 
 
 config_by_name = dict(
@@ -71,3 +90,5 @@ config_by_name = dict(
 )
 
 key = Config.SECRET_KEY
+
+config_vars = config_by_name[os.getenv('BOILERPLATE_ENV') or 'loc']
