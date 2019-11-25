@@ -24,6 +24,7 @@ class LocalConfig(Config):
             app_config = json.load(file)
 
         MONGO_URI = app_config['mongodb_host']
+
         MYSQL_USER = app_config['mysql_user']
         MYSQL_PASSWORD = app_config['mysql_password']
         MYSQL_HOST = app_config['mysql_host']
@@ -62,6 +63,7 @@ class ProductionConfig(Config):
         app_config = json.loads(config_file)
 
         MONGO_URI = app_config['mongodb_host']
+        
         MYSQL_USER = app_config['mysql_user']
         MYSQL_PASSWORD = app_config['mysql_password']
         MYSQL_HOST = app_config['mysql_host']

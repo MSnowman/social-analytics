@@ -25,15 +25,14 @@ class LocalConfig(Config):
             tweet_config = json.loads(file2.read())
 
         MONGO_URI = app_config['mongodb_host']
-
-        ALPHA_ADVANTAGE_KEY = app_config['alpha_advantage_key']
-
-        ANALYSIS_URL = 'http://127.0.0.1:5002/'
+        ANALYSIS_URL = app_config['ANALYSIS_URL']
 
         MYSQL_USER = app_config['mysql_user']
         MYSQL_PASSWORD = app_config['mysql_password']
         MYSQL_HOST = app_config['mysql_host']
         MYSQL_DATABASE = app_config['mysql_database']
+
+        ALPHA_ADVANTAGE_KEY = app_config['alpha_advantage_key']
 
         create_stock_price_table_path = app_config['stock_price_table']
 

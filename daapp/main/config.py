@@ -24,6 +24,7 @@ class LocalConfig(Config):
             app_config = json.load(file)
 
         MONGO_URI = app_config['mongodb_host']
+
     except FileNotFoundError as e:
         print('Local App Config file not found')
 
