@@ -1,15 +1,11 @@
 #!/usr/bin/python
 
-import sys
-import getopt
+
 import tweepy
 from streamingapp.main.streamer.tweepyStreamClass import NewStreamListener
-import boto3
 import json
-from ast import literal_eval
-from flask import current_app as app
-from streamingapp.main.service import streamer_services
 import requests
+from streamingapp.main.config import config_vars
 
 data = {
   "user_id": "tweet_database",
@@ -23,9 +19,8 @@ data = {
 
 
 tweet_creds = "/Users/michaelsnow/PycharmProjects/ApplicationKeys/Twitterkeys.JSON"
-ANALYSIS_URL = 'http://127.0.0.1:5002/'
 
-terms_url = ANALYSIS_URL + 'get_market_analysis_search_terms/' + data['user_id'] + '/' + data['topic']
+terms_url = config_vars.ANALYSIS_URL + 'get_market_analysis_search_terms/' + data['user_id'] + '/' + data['topic']
 terms = requests.get(terms_url)
 terms_json = json.loads(terms.text)
 

@@ -1,6 +1,6 @@
 import tweepy
 import boto3
-from streamingapp.main.config import config_by_name
+from streamingapp.main.config import config_vars
 import time
 import json
 import pymongo
@@ -9,19 +9,13 @@ import requests
 
 class NewStreamListener(tweepy.StreamListener):
 
-    def __init__(self, user_id, topic, queue_url, env, classify):
+    def __init__(self, user_id, topic, queue_url, classify):
         super().__init__()
         self.db = user_id
         self.collection = topic
         self.queue_url = queue_url
         self.queue_client = boto3.client('sqs', region_name='us-west-2')
-        self.env_config = config_by_name[env]
         self.classify = classify
-
-    def mongo_connection(self):
-        mongo_uri = self.env_config.MONGO_URI
-        client = pymongo.MongoClient(mongo_uri)
-        return client
 
     def on_connect(self):
         print("We're Connected!")
@@ -37,8 +31,9 @@ class NewStreamListener(tweepy.StreamListener):
     def on_data(self, data):
         try:
             json_data = json.loads(data)
-            if self.classify:
+            if self.classify is True:
                 self.classify_data(json_data)
+
             else:
                 pass
             # try:
@@ -46,7 +41,8 @@ class NewStreamListener(tweepy.StreamListener):
             #     #                                         MessageBody=data)
             # except:
             #    pass
-        except:
+        except Exception as e:
+            print(e)
             pass
         else:
             self.save_to_mongo_db(json_data)
@@ -58,13 +54,13 @@ class NewStreamListener(tweepy.StreamListener):
             'record_id': json_data['id'],
             'text': json_data['text']
         }
-        ml_app_url = self.env_config.ML_URL + 'mlapi/v1/classify_data'
+        ml_app_url = config_vars.ML_URL + 'classify_data'
         response = requests.post(ml_app_url, json=payload)
         return response, response.json()
 
     def save_to_mongo_db(self, data):
         try:
-            db = self.mongo_connection()
+            db = pymongo.MongoClient(config_vars.MONGO_URI)
             db[self.db][self.collection].insert_one(data)
 
         except Exception as e:

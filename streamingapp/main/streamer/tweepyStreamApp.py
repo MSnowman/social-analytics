@@ -7,6 +7,7 @@ from streamingapp.main.streamer.tweepyStreamClass import NewStreamListener
 import boto3
 import json
 from ast import literal_eval
+import os
 
 
 def start(argv):
@@ -46,7 +47,7 @@ def start(argv):
     search_terms = literal_eval(search_terms)
     search_terms = literal_eval(search_terms)
 
-    creds = get_creds(config_key)
+    creds = get_creds(os.getenv('BOILERPLATE_ENV') or 'loc')
 
     auth = tweepy.OAuthHandler(consumer_key=creds['CONSUMER_KEY'],
                                consumer_secret=creds['CONSUMER_SECRET'])
@@ -54,22 +55,22 @@ def start(argv):
     auth.set_access_token(creds['ACCESS_TOKEN'],
                           creds['ACCESS_SECRET'])
     api = tweepy.API(auth)
-    stream_listener = NewStreamListener(queue_url=queue_url, topic=topic, user_id=user_id, env=env, classify=classify)
+    stream_listener = NewStreamListener(queue_url=queue_url, topic=topic, user_id=user_id, classify=classify)
 
     stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
     stream.filter(track=search_terms, languages=['en'])
 
 
-def get_creds(config_key):
+def get_creds(environment):
     """Function to get credentials from local or S3. Returns credentials."""
-    if config_key == 'loc':
+    if environment == 'loc':
         tweet_creds = "/Users/michaelsnow/PycharmProjects/ApplicationKeys/Twitterkeys.JSON"
         with open(tweet_creds, "r") as file2:
             twitter_config = json.loads(file2.read())
     else:
         s3_client = boto3.client('s3')
-        s3_bucket_name = 'secure-app-config'
-        config_key = 'twitterconfig.json'
+        s3_bucket_name = 'social-config'
+        config_key = 'Social-configs.JSON'
         s3_object = s3_client.get_object(Bucket=s3_bucket_name, Key=config_key)
         file = s3_object['Body'].read().decode('utf-8')
         twitter_config = json.loads(file)
