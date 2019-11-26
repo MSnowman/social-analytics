@@ -76,6 +76,9 @@ class ProductionConfig(Config):
         MYSQL_PASSWORD = app_config['mysql_password']
         MYSQL_HOST = app_config['mysql_host']
 
+        ALPHA_ADVANTAGE_KEY = app_config['alpha_advantage_key']
+        create_stock_price_table_path = app_config['stock_price_table']
+
     except ClientError as e:
         print(e, "Client Error on AWS connecting to S3. Expected if running local.")
 
