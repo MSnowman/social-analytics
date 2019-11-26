@@ -5,8 +5,6 @@ current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfra
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
-
-import sys
 import getopt
 import tweepy
 from streamingapp.main.streamer.tweepyStreamClass import NewStreamListener
