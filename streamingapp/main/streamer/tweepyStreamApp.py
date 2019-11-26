@@ -1,9 +1,14 @@
 #!/usr/bin/python
-import os, sys, inspect
+import os
+import sys
+import inspect
 
-current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parent_dir = os.path.dirname(current_dir)
-sys.path.insert(0, parent_dir)
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+parentdir = os.path.dirname(parentdir)
+parentdir = os.path.dirname(parentdir)
+
+sys.path.insert(0, parentdir)
 
 import getopt
 import tweepy
@@ -81,5 +86,5 @@ def get_creds(environment):
     return twitter_config
 
 
-if __name__ == "__main__":
-    start(sys.argv[3:])
+#if __name__ == "__main__":
+#    start(sys.argv[3:])
