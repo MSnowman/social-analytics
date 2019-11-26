@@ -51,7 +51,6 @@ def start(argv):
             env = arg
         elif opt in ("-a", "--classify"):
             classify = arg
-    print(classify)
     search_terms = literal_eval(search_terms)
     search_terms = literal_eval(search_terms)
 
@@ -86,5 +85,5 @@ def get_creds(environment):
     return twitter_config
 
 
-#if __name__ == "__main__":
-#    start(sys.argv[3:])
+if __name__ == "__main__":
+   start(sys.argv[3:])
