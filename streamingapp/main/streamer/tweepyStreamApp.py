@@ -3,7 +3,7 @@
 import sys
 import getopt
 import tweepy
-from streamingapp.main.streamer.tweepyStreamClass import NewStreamListener
+from ...main.streamer.tweepyStreamClass import NewStreamListener
 import boto3
 import json
 from ast import literal_eval
