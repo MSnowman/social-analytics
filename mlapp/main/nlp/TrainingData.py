@@ -10,7 +10,7 @@ import random
 from mlapp.main.config import config_vars
 
 #Update client to point at AWS
-client = pymongo.MongoClient()
+client = pymongo.MongoClient(config_vars.MONGO_URI)
 
 
 def define_mongo_db(user_id):
