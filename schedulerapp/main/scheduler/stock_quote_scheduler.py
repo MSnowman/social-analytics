@@ -66,11 +66,11 @@ if __name__ == "__main__":
     def request_batch(url=request_url, payload=request_payload):
         requests.post(url, json=payload)
 
-    schedule.every().monday.at("23:12").do(request_batch)
-    schedule.every().tuesday.at("23:12").do(request_batch)
-    schedule.every().wednesday.at("23:12").do(request_batch)
-    schedule.every().thursday.at("23:12").do(request_batch)
-    schedule.every().friday.at("23:12").do(request_batch)
+    schedule.every().monday.at("16:01").do(request_batch)
+    schedule.every().tuesday.at("16:01").do(request_batch)
+    schedule.every().wednesday.at("16:01").do(request_batch)
+    schedule.every().thursday.at("16:01").do(request_batch)
+    schedule.every().friday.at("16:01").do(request_batch)
 
     while True:
         schedule.run_pending()
