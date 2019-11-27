@@ -7,7 +7,7 @@ instance which runs on GMT time therefor the schedules below are set to 08:01 an
 """
 import schedule
 import time
-from schedulerapp.main import config_by_name
+from schedulerapp.main.config import config_vars
 import requests
 import sys
 import getopt
@@ -37,13 +37,12 @@ def get_batch_request_details(argv):
         elif opt in ("-e", "--env"):
             env = arg
 
-    configs = config_by_name[env]
     payload = {'process': 'stock_quotes',
                'market_analysis': market_analysis,
                'env': env,
                'user_id': user_id}
 
-    batch_url = configs.BATCH_URL
+    batch_url = config_vars.BATCH_URL
     batch_request_url = batch_url + 'start_stock_quote'
     return batch_request_url, payload, frequency
 
@@ -57,11 +56,11 @@ if __name__ == "__main__":
     def request_batch(url=request_url, payload=request_payload):
         requests.post(url, json=payload)
 
-    schedule.every().monday.at("16:01").do(request_batch)
-    schedule.every().tuesday.at("16:01").do(request_batch)
-    schedule.every().wednesday.at("16:01").do(request_batch)
-    schedule.every().thursday.at("16:01").do(request_batch)
-    schedule.every().friday.at("16:01").do(request_batch)
+    schedule.every().monday.at("23:05").do(request_batch)
+    schedule.every().tuesday.at("23:05").do(request_batch)
+    schedule.every().wednesday.at("23:05").do(request_batch)
+    schedule.every().thursday.at("23:05").do(request_batch)
+    schedule.every().friday.at("23:05").do(request_batch)
 
     while True:
         schedule.run_pending()

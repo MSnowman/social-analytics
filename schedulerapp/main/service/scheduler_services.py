@@ -1,5 +1,5 @@
 from schedulerapp.main.scheduler import stock_quote_scheduler as sqs
-from schedulerapp.main import config_by_name
+from schedulerapp.main.config import config_vars
 from subprocess import Popen
 from sharedUtils.processManager import ProcessManager
 
@@ -35,11 +35,9 @@ def stop_stock_quote_scheduler(data):
 
 
 def get_file_path(data):
-    #file_path = '/home/ec2-user/twitter_data_analysis_api/streamingapp/main/streamer/tweepyStreamApp.py'
-    network_config = config_by_name[data['env']]
     if data['process_type'] == 'batch':
         if data['process'] == 'stock_quotes':
-            file_path = network_config.STOCK_QUOTE_SCHEDULER_PATH
+            file_path = config_vars.STOCK_QUOTE_SCHEDULER_PATH
         else:
             return 'path does not exist' + " " + data['process']
     else:
