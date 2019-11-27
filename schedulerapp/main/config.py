@@ -74,7 +74,7 @@ class ProductionConfig(Config):
         ML_URL = app_config['ML_URL']
 
         ALPHA_ADVANTAGE_KEY = app_config['alpha_advantage_key']
-        STOCK_QUOTE_SCHEDULER_PATH = app_config['stock_quote_scheduler_path']
+        STOCK_QUOTE_SCHEDULER_PATH = app_config['STOCK_QUOTE_SCHEDULER_PATH']
 
     except ClientError as e:
         print(e, "Client Error on AWS connecting to S3. Expected if running local.")
