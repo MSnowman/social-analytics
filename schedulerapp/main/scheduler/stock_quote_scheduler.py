@@ -5,11 +5,19 @@ stock_price_job(s) are scheduled for 4:01 EST each weekday 1 minute after the NY
 instance which runs on GMT time therefor the schedules below are set to 08:01 and not 16:01.
 
 """
+import os
+import sys
+import inspect
+
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+parentdir = os.path.dirname(parentdir)
+parentdir = os.path.dirname(parentdir)
+
 import schedule
 import time
 from schedulerapp.main.config import config_vars
 import requests
-import sys
 import getopt
 
 
@@ -56,11 +64,11 @@ if __name__ == "__main__":
     def request_batch(url=request_url, payload=request_payload):
         requests.post(url, json=payload)
 
-    schedule.every().monday.at("23:05").do(request_batch)
-    schedule.every().tuesday.at("23:05").do(request_batch)
-    schedule.every().wednesday.at("23:05").do(request_batch)
-    schedule.every().thursday.at("23:05").do(request_batch)
-    schedule.every().friday.at("23:05").do(request_batch)
+    schedule.every().monday.at("23:08").do(request_batch)
+    schedule.every().tuesday.at("23:08").do(request_batch)
+    schedule.every().wednesday.at("23:08").do(request_batch)
+    schedule.every().thursday.at("23:08").do(request_batch)
+    schedule.every().friday.at("23:08").do(request_batch)
 
     while True:
         schedule.run_pending()
