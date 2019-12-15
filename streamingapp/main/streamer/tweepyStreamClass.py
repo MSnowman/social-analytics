@@ -79,8 +79,8 @@ class NewStreamListener(tweepy.StreamListener):
     def on_exception(self, exception):
         with open('stream_errors.txt', 'a+') as file_object:
             if exception is ProtocolError:
-                file_object.write(str(time.ctime() + exception.args(0)) + "\n")
+                file_object.write(time.ctime() + " " + str(exception) + "\n")
             else:
-                file_object.write(str(time.ctime() + exception) + "\n")
+                file_object.write(time.ctime() + " " + str(exception) + "\n")
 
 
