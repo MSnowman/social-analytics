@@ -76,6 +76,6 @@ class NewStreamListener(tweepy.StreamListener):
             return False
 
     def on_exception(self, exception):
-        with open('stream_errors.txt', 'a') as file_object:
+        with open('stream_errors.txt', 'a+') as file_object:
             file_object.write(str(time.ctime() + exception) + "\n")
 
