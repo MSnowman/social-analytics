@@ -5,6 +5,7 @@ import time
 import json
 import pymongo
 import requests
+from urllib3.exceptions import ProtocolError
 
 
 class NewStreamListener(tweepy.StreamListener):
@@ -77,5 +78,9 @@ class NewStreamListener(tweepy.StreamListener):
 
     def on_exception(self, exception):
         with open('stream_errors.txt', 'a+') as file_object:
-            file_object.write(str(time.ctime() + exception) + "\n")
+            if exception is ProtocolError:
+                file_object.write(str(time.ctime() + exception.args(0)) + "\n")
+            else:
+                file_object.write(str(time.ctime() + exception) + "\n")
+
 
