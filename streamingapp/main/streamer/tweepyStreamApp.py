@@ -76,19 +76,19 @@ def start(argv):
     #         time.sleep(60)
     #         stream.filter(track=search_terms, languages=['en'])
 
-    stream(stream, search_terms, 'en')
+    streamer(stream, search_terms, 'en')
 
 
-def stream(streamer, search_terms, language):
+def streamer(stream, search_terms, language):
     error_count = 0
     while True:
         try:
-            streamer.filter(track=search_terms, language=[language])
+            stream.filter(track=search_terms, languages=[language])
         except ProtocolError:
             if error_count < 6:
                 time.sleep(30 + (error_count + 1))
                 error_count += 1
-                stream(streamer, search_terms, language)
+                streamer(streamer, search_terms, language)
             else:
                 break
 
