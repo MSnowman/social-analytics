@@ -16,6 +16,9 @@ from streamingapp.main.streamer.tweepyStreamClass import NewStreamListener
 import boto3
 import json
 from ast import literal_eval
+from urllib3.exceptions import ProtocolError
+import time
+
 
 
 def start(argv):
@@ -65,7 +68,29 @@ def start(argv):
     stream_listener = NewStreamListener(queue_url=queue_url, topic=topic, user_id=user_id, classify=classify)
 
     stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
-    stream.filter(track=search_terms, languages=['en'])
+    #
+    # try:
+    #     stream.filter(track=search_terms, languages=['en'])
+    # except ProtocolError:
+    #     while True:
+    #         time.sleep(60)
+    #         stream.filter(track=search_terms, languages=['en'])
+
+    stream(stream, search_terms, 'en')
+
+
+def stream(streamer, search_terms, language):
+    error_count = 0
+    while True:
+        try:
+            streamer.filter(track=search_terms, language=[language])
+        except ProtocolError:
+            if error_count < 6:
+                time.sleep(30 + (error_count + 1))
+                error_count += 1
+                stream(streamer, search_terms, language)
+            else:
+                break
 
 
 def get_creds(environment):
