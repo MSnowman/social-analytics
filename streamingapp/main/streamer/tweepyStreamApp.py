@@ -84,7 +84,18 @@ def streamer(stream, search_terms, language):
     while True:
         try:
             stream.filter(track=search_terms, languages=[language])
-        except ProtocolError:
+        except ProtocolError as exception:
+            with open('stream_errors.txt', 'a+') as file_object:
+                file_object.write(time.ctime() + " " + str(exception) + "\n")
+            if error_count < 6:
+                time.sleep(30 + (error_count + 1))
+                error_count += 1
+                streamer(streamer, search_terms, language)
+            else:
+                break
+        except ConnectionError as exception:
+            with open('stream_errors.txt', 'a+') as file_object:
+                file_object.write(time.ctime() + " " + str(exception) + "\n")
             if error_count < 6:
                 time.sleep(30 + (error_count + 1))
                 error_count += 1
