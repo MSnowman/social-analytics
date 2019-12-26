@@ -93,6 +93,11 @@ class MarketDataAnalysis:
     def get_streaming_terms_dict(self):
         return self.streaming_terms
 
+    def get_current_document_count(self):
+        db = client[self.db_name]
+        collection = db[self.analysis_name]
+        return collection.count()
+
     def get_history(self):
         return self.history
 
@@ -108,7 +113,7 @@ class MarketDataAnalysis:
         return keys
 
     def get_streaming_terms_list(self):
-        terms =[]
+        terms = []
         for key in self.get_streaming_terms_dict():
             terms.append(key)
             if type(self.get_streaming_terms_dict()[key]) == list:
@@ -135,7 +140,7 @@ class MarketDataAnalysis:
         try:
             assert type(keys) == list
             for key in keys:
-                self.streaming_terms.update({key:[]})
+                self.streaming_terms.update({key: []})
         except AssertionError:
             print('keys must be a list')
 
@@ -152,7 +157,8 @@ class MarketDataAnalysis:
 
     def create_json(self):
         data = {'name': self.get_analysis_name(), 'description': self.get_analysis_description(),
-                'terms': self.get_streaming_terms_dict(), 'created_dated': time.time(), 'history': self.get_history()}
+                'terms': self.get_streaming_terms_dict(), 'created_dated': time.time(), 'history': self.get_history(),
+                'document_count': self.get_current_document_count()}
         temp_file = json.dumps(data, indent=4)
         insert_file = json_util.loads(temp_file)
         return insert_file

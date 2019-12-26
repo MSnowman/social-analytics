@@ -1,5 +1,4 @@
 from daapp.main.analysis import market_data_analysis as mda
-import pre_config
 import json
 from bson import json_util
 
