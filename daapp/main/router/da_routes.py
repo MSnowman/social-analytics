@@ -48,7 +48,7 @@ class GetMarketAnalysisDetails(Resource):
     @ns_da.doc('get_market_analysis_details')
     def get(self, user_id, analysis_name):
         """Get the details of a given market analysis"""
-        return da_services.get_market_analysis_details(user_id, analysis_name)
+        return da_services.get_market_analysis_details(user_id, analysis_name), {'Access-Control-Allow-Origin': '*'}
 
 
 @ns_da.route('get_market_analysis_search_terms/<string:user_id>/<string:analysis_name>')
