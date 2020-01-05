@@ -66,7 +66,7 @@ class GetClassifiedTrainingData(Resource):
     @ns_ml.doc('get_classified_training_data')
     def get(self, user_id, topic_name):
         """Get only training data of a topic that has been classified for a given user_id"""
-        return nlp_services.get_classified_data(user_id, topic_name)
+        return nlp_services.get_classified_data(user_id, topic_name), {'Access-Control-Allow-Origin': '*'}
 
 
 @ns_ml.route('get_unclassified_training_data/<string:user_id>/<string:topic_name>')
@@ -74,7 +74,7 @@ class GetUnclassifiedTrainingData(Resource):
     @ns_ml.doc('get_unclassified_training_data')
     def get(self, user_id, topic_name):
         """Get only training data of a topic that has not yet been classified for a given user_id"""
-        return nlp_services.get_unclassified_data(user_id, topic_name)
+        return nlp_services.get_unclassified_data(user_id, topic_name), {'Access-Control-Allow-Origin': '*'}
 
 
 @ns_ml.route('get_all_training_data/<string:user_id>/<string:topic_name>')
@@ -82,7 +82,7 @@ class GetAllTrainingData(Resource):
     @ns_ml.doc('get_all_training_data')
     def get(self, user_id, topic_name):
         """ Get all training data of a topic for a given user_id"""
-        return nlp_services.get_all_training_data(user_id, topic_name)
+        return nlp_services.get_all_training_data(user_id, topic_name), {'Access-Control-Allow-Origin': '*'}
 
 
 @ns_ml.route('get_list_training_data_topics/<string:user_id>')
