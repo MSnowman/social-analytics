@@ -1,9 +1,10 @@
 import os
 
 
-from mlapp.main import create_app
+from mlapp.main import create_app, Cor
 
 app = create_app(os.getenv('BOILERPLATE_ENV') or 'loc')
+Cor(app, resources=r'/api/*', allow_headers='Content-Type')
 
 
 if __name__ == '__main__':
