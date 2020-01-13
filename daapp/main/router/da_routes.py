@@ -56,7 +56,7 @@ class GetMarketAnalysisStreamingTerms(Resource):
     @ns_da.doc('get_market_analysis_streaming_terms')
     def get(self, user_id, analysis_name):
         """Get the terms a streamer will listen for"""
-        return da_services.get_market_analysis_search_terms(user_id, analysis_name)
+        return da_services.get_market_analysis_search_terms(user_id, analysis_name), {'Access-Control-Allow-Origin': '*'}
 
 
 @ns_da.route('get_market_analysis_tickers/<string:user_id>/<string:analysis_name>')
@@ -64,7 +64,7 @@ class GetMarketAnalysisTickers(Resource):
     @ns_da.doc('get_market_analysis_tickers')
     def get(self, user_id, analysis_name):
         """Get a list of tickers associated with the market analysis"""
-        return da_services.get_market_analysis_tickers(user_id, analysis_name)
+        return da_services.get_market_analysis_tickers(user_id, analysis_name), {'Access-Control-Allow-Origin': '*'}
 
 
 

@@ -2,6 +2,7 @@ from mlapp.main.nlp import TrainingData as td
 from mlapp.main.nlp import TextClassifier as tc
 from mlapp.main import utilities as utils
 from mlapp.main.config import config_vars
+from flask import jsonify
 
 
 def setup_training_data(data):
@@ -69,7 +70,10 @@ def annotate_training_data(data):
     annotator = data['annotator']
     training_data = td.restore_TrainingData(user_id, topic_name)
     training_data.annotate_training_data(records, annotator)
-    return "Success"
+    result = {'result': 'Success'}
+    result = jsonify(result)
+    result = result.headers.add('Access-Control-Allow-Origin', '*')
+    return result
 
 
 def classify_data(data):

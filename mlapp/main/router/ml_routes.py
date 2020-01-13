@@ -108,7 +108,7 @@ class AnnotateData(Resource):
     @ns_ml.expect(record_annotations)
     def post(self):
         """Annotate training data as relevant or not relevant"""
-        return nlp_services.annotate_training_data(data=ns_ml.payload), {'Access-Control-Allow-Origin': '*'}
+        return nlp_services.annotate_training_data(data=ns_ml.payload)
 
 
 @ns_ml.route('classify_data')
