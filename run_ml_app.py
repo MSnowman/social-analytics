@@ -1,11 +1,9 @@
 import os
 
 
-from mlapp.main import create_app, Cor
+from mlapp.main import create_app
 
 app = create_app(os.getenv('BOILERPLATE_ENV') or 'loc')
-Cor(app, resources=r'/api/*', allow_headers='Content-Type')
-
 
 if __name__ == '__main__':
     if app.config['ENV'] == 'local':
