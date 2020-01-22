@@ -19,7 +19,11 @@ def get_more_training_data(data):
     user_id = data['user_id']
     topic_name = data['topic_name']
     existing_training_data = td.restore_TrainingData(user_id, topic_name)
-    existing_training_data.generate_new_training_data(data['word_filter'], data['number_records'])
+    try:
+        existing_training_data.generate_new_training_data(data['word_filter'], data['number_records'])
+    except:
+        existing_training_data.generate_new_training_data(records=data['number_records'])
+
     existing_training_data.insert_new_training_data_to_db()
     return "Successfully added " + str(data['number_records']) + " new records to the training data"
 
@@ -70,10 +74,7 @@ def annotate_training_data(data):
     annotator = data['annotator']
     training_data = td.restore_TrainingData(user_id, topic_name)
     training_data.annotate_training_data(records, annotator)
-    result = {'result': 'Success'}
-    result = jsonify(result)
-    result = result.headers.add('Access-Control-Allow-Origin', '*')
-    return result
+    return "Success"
 
 
 def classify_data(data):
