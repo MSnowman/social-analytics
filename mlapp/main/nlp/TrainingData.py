@@ -82,13 +82,13 @@ class TrainingData:
                 collection = topic_collection
                 sample_query = [{'$sample': {'size': records}}]
                 sample_data = collection.aggregate(sample_query)
+                self.new_training_data = sample_data
             else:
                 filtered_data = topic_collection.find({'$text': {'$search': word_filter}})
                 sample_data = random.sample(list(filtered_data), records)
+                self.new_training_data = sample_data
 
             return "Successfully added " + str(records) + " new record/s to the training data"
-
-            self.new_training_data = sample_data
 
         except AutoReconnect:
             return "AutoReconnect Exception, please try reducing number of records for given world filter or reduce " \
@@ -97,8 +97,6 @@ class TrainingData:
         except ServerSelectionTimeoutError:
             return "Something went wrong.  Please try later"
             pass
-
-
 
     def insert_new_training_data_to_db(self):
 
