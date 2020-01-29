@@ -5,6 +5,7 @@ where it is stored
 """
 
 import pymongo
+from pymongo.errors import AutoReconnect, ServerSelectionTimeoutError
 from mlapp.main import utilities as utils
 import random
 from mlapp.main.config import config_vars
@@ -67,7 +68,7 @@ class TrainingData:
             except:
                 pass
 
-    def generate_new_training_data(self, word_filter=None, records=25):
+    def generate_new_training_data(self, word_filter=None, records=1):
         """
         :param word_filter: optional field.  String to refine the random record search in.  Default value is None
         :param records: number of sample data records you wish to return.  Default value is 25
@@ -76,15 +77,28 @@ class TrainingData:
         """
         topic_collection = self.mongo_db[self.topic_name]
 
-        if word_filter is None:
-            collection = topic_collection
-            sample_query = [{'$sample': {'size': records}}]
-            sample_data = collection.aggregate(sample_query)
-        else:
-            filtered_data = topic_collection.find({'$text': {'$search': word_filter}})
-            sample_data = random.sample(list(filtered_data), records)
+        try:
+            if word_filter is None:
+                collection = topic_collection
+                sample_query = [{'$sample': {'size': records}}]
+                sample_data = collection.aggregate(sample_query)
+            else:
+                filtered_data = topic_collection.find({'$text': {'$search': word_filter}})
+                sample_data = random.sample(list(filtered_data), records)
 
-        self.new_training_data = sample_data
+            return "Successfully added " + str(records) + " new record/s to the training data"
+
+            self.new_training_data = sample_data
+
+        except AutoReconnect:
+            return "AutoReconnect Exception, please try reducing number of records for given world filter or reduce " \
+                   "word filter to 1 string"
+            pass
+        except ServerSelectionTimeoutError:
+            return "Something went wrong.  Please try later"
+            pass
+
+
 
     def insert_new_training_data_to_db(self):
 

@@ -23,9 +23,12 @@ def get_more_training_data(data):
         existing_training_data.generate_new_training_data(data['word_filter'], data['number_records'])
     except:
         existing_training_data.generate_new_training_data(records=data['number_records'])
+        return "Successfully added " + str(data['number_records']) + " new records containing to the training data.  " \
+            "There was an error with the word filer.  Please try less records or reduce word filter complexity."
 
     existing_training_data.insert_new_training_data_to_db()
-    return "Successfully added " + str(data['number_records']) + " new records to the training data"
+    return "Successfully added " + str(data['number_records']) + " new records containing " + data['word_filter'] +\
+           " to the training data"
 
 
 def get_all_training_data(user_id, topic_name):
