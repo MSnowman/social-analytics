@@ -26,7 +26,7 @@ def get_more_training_data(data):
         return result
 
     existing_training_data.insert_new_training_data_to_db()
-    return result 
+    return result
 
 
 def get_all_training_data(user_id, topic_name):

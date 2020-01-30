@@ -294,8 +294,12 @@ def format_datetime_tweet_time(tweet_time):
 
 def create_training_table_json(training_data, table_columns):
 
-    data = {'training_data': []}
+    data = {'training_data': [],
+            'training_stats': {'relevant': '', 'not_relevant': '', 'unclassified': ''}}
 
+    relevant = 0
+    not_relevant = 0
+    unclassified = 0
     for row in training_data:
         record = {}
         for column in table_columns:
@@ -304,6 +308,15 @@ def create_training_table_json(training_data, table_columns):
             record[table_columns[column]] = row[column]
         record['tweet_time'] = format_datetime_tweet_time(record['tweet_time'])
         data['training_data'].append(record)
+        if row[8]:
+            relevant += 1
+        elif not row[8]:
+            not_relevant += 1
+        else:
+            unclassified += 1
+    data['training_stats']['relevant'] = relevant
+    data['training_stats']['not_relevant'] = not_relevant
+    data['training_stats']['unclassified'] = unclassified
 
     data = json.dumps(data, indent=4)
     json_file = json.loads(data)
