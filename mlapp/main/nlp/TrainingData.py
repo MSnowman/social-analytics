@@ -10,7 +10,6 @@ from mlapp.main import utilities as utils
 import random
 from mlapp.main.config import config_vars
 
-#Update client to point at AWS
 client = pymongo.MongoClient(config_vars.MONGO_URI)
 
 

@@ -15,15 +15,23 @@ training_data = ns_ml.model('TrainingData', {
     'number_records': fields.Integer(required=False, description='Number of training data records.  Default is 250')
 })
 
+annotation = ns_ml.model('Annotation', {
+    'record_id': fields.String(require=True, description='record unique ID'),
+    'relevant': fields.String(requied=True, description='TRUE or FALSE'),
+    'tickers': fields.List(fields.String(), required=False, description='List of "tickers" to associate the record to. '
+                                                                        'Used when a topic has sub topics within it')
+})
+
 record_annotations = ns_ml.model('RecordAnnotations', {
     'user_id': fields.String(required=True, description='User Id training the data.  Could be either an individual '
                                                         'or business account'),
     'topic_name': fields.String(required=True, decription='Topic name that was listening to search terms'),
     'data_cnx': fields.Raw(required=True, description='MySQL connection credentials'),
-    'records': fields.List(fields.List(fields.String), required=True, description='List of listed pairs of '
-                                                                                  '[unique_id, TRUE/FALSE]'),
+    'records': fields.List(fields.Nested(annotation), required=True, description='List of listed pairs of '
+                                                                                 '[unique_id, TRUE/FALSE]'),
     'annotator': fields.String(required=True, description='Name of annotator')
 })
+
 
 new_annotators = ns_ml.model('NewAnnotators', {
     'user_id': fields.String(required=True, description='User Id training the data.  Could be either an individual '

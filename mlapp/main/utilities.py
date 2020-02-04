@@ -61,6 +61,7 @@ def create_tweet_training_data_sql_table(cnx, table_name):
         'tweeter_screen_name varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,' \
         'tweet_text varchar(280) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,' \
         'tweet_hashtags varchar(280) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,' \
+        'ticker varchar(280) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,' \
         'relevant varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,' \
         'PRIMARY KEY (`unique_tweet_id`)'\
         ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;'
@@ -198,24 +199,25 @@ def annotate_training_data(cnx, table_name, data, annotator, annotators):
     coplumns based on the values of each annotator for that given ID.
     relevant = TRUE if at least one annotator deaming the record relevant and no annotator deaming the record not relevant
     :param cnx: MySQL database connect
+
     :param table_name: name of training data table
     :param data: List with embedded list of data [id:TRUE/FALSE]
     :param annotator: name of annotator
     :param annotators: list of annotators
     :return:
     """
-    classfied_data = create_training_table_json(get_training_data(cnx, 'classified', table_name),
-                                                get_table_column_names(cnx, table_name))
+    classified_data = create_training_table_json(get_training_data(cnx, 'classified', table_name),
+                                                 get_table_column_names(cnx, table_name))
 
     annotator_columns = ['annotator_' + name for name in annotators]
     annotator_columns.remove(annotator)
 
     for row in data:
-        if any(d['unique_tweet_id'] == row[0] for d in classfied_data['training_data']):
+        if any(d['unique_tweet_id'] == row['record_id'] for d in classified_data['training_data']):
 
-            tweet = get_item_from_json(classfied_data, row[0])
+            tweet = get_item_from_json(classified_data, row['record_id'])
             annotator_results = [tweet[name] for name in annotator_columns]
-            annotator_results.append(row[1])
+            annotator_results.append(row['relevant'])
 
             if 'TRUE' in annotator_results and 'FALSE' in annotator_results:
                 tweet['relevant'] = 'disagreement'
@@ -224,17 +226,18 @@ def annotate_training_data(cnx, table_name, data, annotator, annotators):
             else:
                 tweet['relevant'] = 'FALSE'
 
-            sql = 'UPDATE ' + cnx.database + '.' + table_name + ' SET relevant = %s, ' + annotator + ' = %s ' + \
-                'WHERE unique_tweet_id = %s'
-            val = (tweet['relevant'], row[1], row[0])
+            sql = 'UPDATE ' + cnx.database + '.' + table_name + ' SET relevant = %s, ' + annotator + ' = %s, ' + \
+                  'ticker = %s WHERE unique_tweet_id = %s'
+            val = (tweet['relevant'], row['relevant'], str(row['tickers']).strip('[]'), row['record_id'])
             my_cursor = cnx.cursor()
             my_cursor.execute(sql, val)
             cnx.commit()
 
         else:
-            sql = 'UPDATE ' + cnx.database + '.' + table_name + ' SET relevant = %s, ' + annotator + ' = %s ' + \
-                'WHERE unique_tweet_id = %s'
-            val = (row[1], row[1], row[0])
+            sql = 'UPDATE ' + cnx.database + '.' + table_name + ' SET relevant = %s, ' + annotator + ' = %s, ' + \
+                'ticker = %s WHERE unique_tweet_id = %s'
+            val = (row['relevant'], row['relevant'], str(row['tickers']).strip('[]'), row['record_id'])
+            print(val)
             my_cursor = cnx.cursor()
             my_cursor.execute(sql, val)
             cnx.commit()
