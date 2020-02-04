@@ -311,9 +311,9 @@ def create_training_table_json(training_data, table_columns):
             record[table_columns[column]] = row[column]
         record['tweet_time'] = format_datetime_tweet_time(record['tweet_time'])
         data['training_data'].append(record)
-        if row[7] == "TRUE":
+        if row[8] == "TRUE":
             relevant += 1
-        elif row[7] == "FALSE":
+        elif row[8] == "FALSE":
             not_relevant += 1
         else:
             unclassified += 1
