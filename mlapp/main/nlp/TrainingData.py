@@ -149,6 +149,10 @@ class TrainingData:
 
         return
 
+    def pre_tag_training_data(self, data):
+
+        return
+
     def save_topic_details(self):
 
         collection_name = self.mongo_db['metadata']

@@ -62,6 +62,7 @@ def create_tweet_training_data_sql_table(cnx, table_name):
         'tweet_text varchar(280) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,' \
         'tweet_hashtags varchar(280) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,' \
         'ticker varchar(280) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,' \
+        'pre_tag varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,' \
         'relevant varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,' \
         'PRIMARY KEY (`unique_tweet_id`)'\
         ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;'

@@ -88,4 +88,13 @@ def classify_data(data):
     return str(record_id) + ' is Relevant? ' + text_classifier.is_relevant(record_text)
 
 
+def pre_tag_data(data):
+    user_id = 'pre_tag'
+    topic = data['topic_name']
+    record_id = data['record_id']
+    record_text = data['text']
+    training_data = td.restore_TrainingData()
+    return
+
+
 
