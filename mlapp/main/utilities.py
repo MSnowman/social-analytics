@@ -62,7 +62,7 @@ def create_tweet_training_data_sql_table(cnx, table_name):
         'tweet_text varchar(280) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,' \
         'tweet_hashtags varchar(280) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,' \
         'ticker varchar(280) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,' \
-        'pre_tag varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,' \
+        'pre_tags varchar(280) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,' \
         'relevant varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,' \
         'PRIMARY KEY (`unique_tweet_id`)'\
         ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;'
@@ -71,7 +71,17 @@ def create_tweet_training_data_sql_table(cnx, table_name):
     my_cursor.execute(sql)
 
 
-def insert_tweet_training_data_to_mysql(cnx, topic, table_name, data):
+def pre_tag(text, terms):
+    tags = []
+    for term in terms:
+        for item in terms[term]:
+            if str.lower(item) in str.lower(text):
+                if item not in tags:
+                    tags.append(term)
+    return tags
+
+
+def insert_tweet_training_data_to_mysql(cnx, topic, table_name, data, terms):
     """
     :param cnx: MySQL database connection
     :param topic: name of the topic
@@ -102,13 +112,16 @@ def insert_tweet_training_data_to_mysql(cnx, topic, table_name, data):
         try:
             tu = tweet['user']
             ts = format_str_tweet_time(tweet['created_at'])
+            pre_tags = pre_tag(tweet['text'] + get_listed_data(tweet['entities']['hashtags'], 'text'), terms)
+
             val = (tweet['id_str'],
                    ts,
                    topic,
                    tu['id_str'],
                    tu['screen_name'],
                    tweet['text'],
-                   get_listed_data(tweet['entities']['hashtags'], 'text'))
+                   get_listed_data(tweet['entities']['hashtags'], 'text'),
+                   str(pre_tags).strip('[]'))
 
             sql = 'INSERT INTO ' + table_name + ' (' \
                   'unique_tweet_id, ' \
@@ -117,8 +130,9 @@ def insert_tweet_training_data_to_mysql(cnx, topic, table_name, data):
                   'tweeter, ' \
                   'tweeter_screen_name, ' \
                   'tweet_text, ' \
-                  'tweet_hashtags)' \
-                  'VALUES (%s, %s, %s, %s, %s, %s, %s)'
+                  'tweet_hashtags,' \
+                  'pre_tags)'\
+                  'VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'
             my_cursor.execute(sql, val)
             cnx.commit()
         except mysql.connector.errors.IntegrityError:

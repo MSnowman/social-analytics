@@ -99,6 +99,14 @@ class TrainingData:
             return "Something went wrong.  Please try later"
             pass
 
+    def get_pretag_terms(self):
+        terms = self.mongo_db['analyses'].find_one({"name": self.topic_name})
+        terms = terms["terms"]
+        data = {}
+        for a in terms:
+            data[a] = [a, terms[a]]
+        return data
+
     def insert_new_training_data_to_db(self):
 
         """
@@ -106,7 +114,7 @@ class TrainingData:
         :return: saves information to db
         """
         utils.insert_tweet_training_data_to_mysql(self.cnx, self.topic_name, self.training_table_name,
-                                                  self.new_training_data)
+                                                  self.new_training_data, self.get_pretag_terms())
 
     def get_annotators(self):
         return self.annotators
