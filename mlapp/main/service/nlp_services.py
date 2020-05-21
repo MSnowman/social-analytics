@@ -85,7 +85,17 @@ def classify_data(data):
     record_text = data['text']
     text_classifier = tc.TextClassifier(user_id, topic_name)
     text_classifier.train_classier()
-    return str(record_id) + ' is Relevant? ' + text_classifier.is_relevant(record_text)
+    result = [str(record_id), text_classifier.is_relevant(record_text)]
+    return result
+
+
+def pre_tag_data(data):
+    user_id = 'pre_tag'
+    topic = data['topic_name']
+    record_id = data['record_id']
+    record_text = data['text']
+    training_data = td.restore_TrainingData()
+    return
 
 
 
