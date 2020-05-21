@@ -7,8 +7,6 @@ training_data = ns_ml.model('TrainingData', {
     'user_id': fields.String(required=True, description='User Id training the data.  Could be either an individual '
                                                         'or business account'),
     'topic_name': fields.String(required=True, decription='Topic name that was listening to search terms'),
-    'data_cnx': fields.Raw(required=True, description='MySQL connection credentials'),
-    'data_mongo': fields.Raw(required=True, description='MongoDB connection credentials'),
     'word_filter': fields.String(required=False, description='Enter a word to refine what training data to add.  '
                                                              'Used when not enough Relevant data is returned on your'
                                                              'initial request '),
@@ -26,7 +24,6 @@ record_annotations = ns_ml.model('RecordAnnotations', {
     'user_id': fields.String(required=True, description='User Id training the data.  Could be either an individual '
                                                         'or business account'),
     'topic_name': fields.String(required=True, decription='Topic name that was listening to search terms'),
-    'data_cnx': fields.Raw(required=True, description='MySQL connection credentials'),
     'records': fields.List(fields.Nested(annotation), required=True, description='List of listed pairs of '
                                                                                  '[unique_id, TRUE/FALSE]'),
     'annotator': fields.String(required=True, description='Name of annotator')
@@ -37,7 +34,6 @@ new_annotators = ns_ml.model('NewAnnotators', {
     'user_id': fields.String(required=True, description='User Id training the data.  Could be either an individual '
                                                         'or business account'),
     'topic_name': fields.String(required=True, decription='Topic name that was listening to search terms'),
-    'data_cnx': fields.Raw(required=True, description='MySQL connection credentials'),
     'annotators': fields.List(fields.String, required=True, description='List of annotators to add.')
 })
 

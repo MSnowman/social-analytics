@@ -107,3 +107,4 @@ venv.bak/
 .idea/social-analytics.iml
 stream_errors.txt
 .DS_Store
+pjp_relevant_tweets.csv
