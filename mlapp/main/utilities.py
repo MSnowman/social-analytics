@@ -444,7 +444,6 @@ def create_training_table_json(training_data, table_columns):
             record[table_columns[column]] = row[column]
         record['tweet_time'] = format_datetime_tweet_time(record['tweet_time'])
         data['training_data'].append(record)
-        print(f"The record is {row[9]}")
         if row[9] == "TRUE":
             relevant += 1
         elif row[9] == "FALSE":

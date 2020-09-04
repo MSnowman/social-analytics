@@ -95,14 +95,14 @@ def streamer_classify(data):
     record_text = data['data']['text']
     text_classifier = tc.TextClassifier(user_id, topic_name)
     text_classifier.train_classier()
-    result = [str(record_id), text_classifier.is_relevant(record_text)]
+    result = [str(record_id), record_text, text_classifier.is_relevant(record_text)]
     #try:
     trained = td.TrainingData(user_id, topic_name)
     trained.insert_tweet_stream_data_to_mysql(data, result[1])
     #except:
     #pass
 
-    #return result
+    return result
 
 
 def pre_tag_data(data):

@@ -29,7 +29,6 @@ def start(argv):
         print('tweepyStreamApp.py -q <queue_url> -s <search_terms> -t <topic> -u <user_id> -c <config_key> -e <env> '
               '-a <classify>')
         sys.exit(2)
-    print(opts)
     queue_url = None
     search_terms = None
     topic = None

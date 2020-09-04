@@ -57,7 +57,7 @@ class NewStreamListener(tweepy.StreamListener):
         }
         ml_app_url = config_vars.ML_URL + 'streamer_classify'
         response = requests.post(ml_app_url, json=payload)
-        print(response)
+        print(response.json())
         return response.json()
 
     def save_to_mongo_db(self, data):
