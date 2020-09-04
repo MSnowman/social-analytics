@@ -39,6 +39,20 @@ def get_market_analysis_details(user_id, analysis_name):
 def get_market_analysis_search_terms(user_id, analysis_name):
     market_analysis = mda.restore_market_analysis(user_id, analysis_name)
     search_terms = market_analysis.get_streaming_terms_list()
+
+    new_terms = []
+
+    for term in search_terms:
+        if type(term.split()) == list:
+            for i in term.split():
+                new_terms.append(i)
+        else:
+            new_terms.append(term)
+
+    new_terms = set(new_terms)
+    search_terms = list(new_terms)
+
+
     data = {'search_terms': search_terms}
     temp_file = json.dumps(data, indent=4)
     search_terms = json_util.loads(temp_file)
