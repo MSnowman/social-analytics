@@ -4,6 +4,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from pandas.io.json import json_normalize
 from mlapp.main.nlp.TrainingData import TrainingData
+import mlapp.main.utilities as utils
 
 
 class TextClassifier(TrainingData):

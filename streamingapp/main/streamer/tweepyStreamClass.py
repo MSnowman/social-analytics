@@ -20,6 +20,7 @@ class NewStreamListener(tweepy.StreamListener):
 
     def on_connect(self):
         print("We're Connected!")
+        print("Clasification Status = " + str(self.classify))
 
     def on_warning(self, notice):
         print(notice.text)
@@ -52,12 +53,12 @@ class NewStreamListener(tweepy.StreamListener):
         payload = {
             'user_id': self.db,
             'topic_name': self.collection,
-            'record_id': json_data['id'],
-            'text': json_data['text']
+            'data': json_data
         }
-        ml_app_url = config_vars.ML_URL + 'classify_data'
+        ml_app_url = config_vars.ML_URL + 'streamer_classify'
         response = requests.post(ml_app_url, json=payload)
-        return response, response.json()
+        print(response)
+        return response.json()
 
     def save_to_mongo_db(self, data):
         try:

@@ -45,6 +45,7 @@ class TrainingData:
         self.topic_name = topic_name.lower()
         self.description = ''
         self.training_table_name = utils.training_table_name(topic_name)
+        self.streaming_table_name = topic_name + "_streaming_data"
         self.annotators = []
         self.data_source_config = {}
         self.training_data_store_config = {}
@@ -110,11 +111,20 @@ class TrainingData:
     def insert_new_training_data_to_db(self):
 
         """
-        :param data: mongo cursor object of data
         :return: saves information to db
         """
         utils.insert_tweet_training_data_to_mysql(self.cnx, self.topic_name, self.training_table_name,
                                                   self.new_training_data, self.get_pretag_terms())
+
+    def insert_tweet_stream_data_to_mysql(self, data, relevant):
+
+        """
+        :param data: record
+        :param relevant: TRUE or FALSE
+        :return: saves information to db
+        """
+        utils.insert_tweet_stream_data_to_mysql(self.cnx, self.topic_name, self.streaming_table_name,
+                                                data, self.get_pretag_terms(), relevant)
 
     def get_annotators(self):
         return self.annotators

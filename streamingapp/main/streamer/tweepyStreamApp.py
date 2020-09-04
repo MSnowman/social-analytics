@@ -20,7 +20,6 @@ from urllib3.exceptions import ProtocolError
 import time
 
 
-
 def start(argv):
     try:
         opts, args = getopt.getopt(argv, "q:s:t:u:c:e:a:", ["queue=", "search_terms=", "topic=", "user_id=", "config_key=",
@@ -65,7 +64,7 @@ def start(argv):
     auth.set_access_token(creds['ACCESS_TOKEN'],
                           creds['ACCESS_SECRET'])
     api = tweepy.API(auth)
-    stream_listener = NewStreamListener(queue_url=queue_url, topic=topic, user_id=user_id, classify=classify)
+    stream_listener = NewStreamListener(queue_url=queue_url, topic=topic, user_id=user_id, classify=bool(classify))
 
     stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
     #

@@ -122,3 +122,12 @@ class ClassifyData(Resource):
     def post(self):
         """NLP Classification of Data"""
         return nlp_services.classify_data(data=ns_ml.payload), {'Access-Control-Allow-Origin': '*'}
+
+
+@ns_ml.route('streamer_classify')
+class StreamerClassify(Resource):
+    @ns_ml.doc('streamer_classify')
+    @ns_ml.expect(record_to_classify)
+    def post(self):
+        """NLP Classification of Streamer Data"""
+        return nlp_services.streamer_classify(data=ns_ml.payload), {'Access-Control-Allow-Origin': '*'}
