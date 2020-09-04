@@ -23,7 +23,6 @@ def get_more_training_data(data):
         result = existing_training_data.generate_new_training_data(data['word_filter'], data['number_records'])
     except:
         result = existing_training_data.generate_new_training_data(records=data['number_records'])
-        return result
 
     existing_training_data.insert_new_training_data_to_db()
     return result

@@ -50,6 +50,10 @@ class GetMarketAnalysisDetails(Resource):
         """Get the details of a given market analysis"""
         return da_services.get_market_analysis_details(user_id, analysis_name), {'Access-Control-Allow-Origin': '*'}
 
+    def delete(self, user_id, analysis_name):
+        """Delete an analysis"""
+        return da_services.delete_market_data_analysis(user_id, analysis_name), {'Access-Control-Allow-Origin': '*'}
+
 
 @ns_da.route('get_market_analysis_search_terms/<string:user_id>/<string:analysis_name>')
 class GetMarketAnalysisStreamingTerms(Resource):
@@ -65,7 +69,6 @@ class GetMarketAnalysisTickers(Resource):
     def get(self, user_id, analysis_name):
         """Get a list of tickers associated with the market analysis"""
         return da_services.get_market_analysis_tickers(user_id, analysis_name), {'Access-Control-Allow-Origin': '*'}
-
 
 
 

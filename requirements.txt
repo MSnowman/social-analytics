@@ -16,5 +16,6 @@ boto3
 botocore
 urllib3
 flask-cors
+bson
 
 

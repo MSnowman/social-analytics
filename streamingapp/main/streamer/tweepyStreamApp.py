@@ -29,6 +29,7 @@ def start(argv):
         print('tweepyStreamApp.py -q <queue_url> -s <search_terms> -t <topic> -u <user_id> -c <config_key> -e <env> '
               '-a <classify>')
         sys.exit(2)
+    print(opts)
     queue_url = None
     search_terms = None
     topic = None
@@ -37,7 +38,8 @@ def start(argv):
     env = None
     for opt, arg in opts:
         if opt == '-h':
-            print('tweepyStreamApp.py -q <queue_url> -s <search_terms> -t <topic> -u <user_id> -c <config> -e <env>')
+            print('tweepyStreamApp.py -q <queue_url> -s <search_terms> -t <topic> -u <user_id> -c <config> -e <env> '
+                  '-a <classify>')
             sys.exit()
         elif opt in ("-q", "--queue"):
             queue_url = arg
@@ -64,7 +66,7 @@ def start(argv):
     auth.set_access_token(creds['ACCESS_TOKEN'],
                           creds['ACCESS_SECRET'])
     api = tweepy.API(auth)
-    stream_listener = NewStreamListener(queue_url=queue_url, topic=topic, user_id=user_id, classify=bool(classify))
+    stream_listener = NewStreamListener(queue_url=queue_url, topic=topic, user_id=user_id, classify=classify)
 
     stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
     #

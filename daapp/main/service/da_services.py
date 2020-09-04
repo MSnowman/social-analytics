@@ -25,6 +25,12 @@ def update_market_data_analysis(data):
     #analysis.add_streaming_terms()
 
 
+def delete_market_data_analysis(user_id, analysis_name):
+    market_analysis = mda.restore_market_analysis(user_id, analysis_name)
+    market_analysis.delete_analysis_from_mongo()
+    return
+
+
 def get_list_of_market_analyses(user_id):
     market_analyses = mda.get_list_of_analyses(user_id)
     return market_analyses

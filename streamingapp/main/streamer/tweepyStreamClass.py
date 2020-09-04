@@ -33,7 +33,7 @@ class NewStreamListener(tweepy.StreamListener):
     def on_data(self, data):
         try:
             json_data = json.loads(data)
-            if self.classify is True:
+            if self.classify == 'True':
                 self.classify_data(json_data)
 
             else:

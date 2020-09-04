@@ -71,7 +71,7 @@ class TrainingData:
     def generate_new_training_data(self, word_filter=None, records=1):
         """
         :param word_filter: optional field.  String to refine the random record search in.  Default value is None
-        :param records: number of sample data records you wish to return.  Default value is 25
+        :param records: number of sample data records you wish to return.  Default value is 1
         :return: mongo cursor object of sample data
 
         """
@@ -105,7 +105,8 @@ class TrainingData:
         terms = terms["terms"]
         data = {}
         for a in terms:
-            data[a] = [a, terms[a]]
+            data[a] = [terms[a]]
+
         return data
 
     def insert_new_training_data_to_db(self):

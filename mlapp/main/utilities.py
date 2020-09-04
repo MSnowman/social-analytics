@@ -99,11 +99,18 @@ def create_tweet_streamer_classified_data_sql_table(cnx, table_name):
 
 def pre_tag(text, terms):
     tags = []
+
+    # try:
     for term in terms:
-        for item in terms[term]:
-            if str.lower(item) in str.lower(text):
-                if item not in tags:
+        if str.lower(term) in str.lower(text):
+            if term not in tags:
                     tags.append(term)
+    # except TypeError:
+    #     for term in terms:
+    #         if str.lower(term) in str.lower(text):
+    #             if term not in tags:
+    #                 tags.append(term)
+
     return tags
 
 

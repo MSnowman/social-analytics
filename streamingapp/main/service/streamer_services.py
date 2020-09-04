@@ -12,6 +12,7 @@ def start_stream(data):
     terms_url = config_vars.ANALYSIS_URL + 'get_market_analysis_search_terms/' + user_id + '/' + topic
     terms = requests.get(terms_url)
     terms_json = json.loads(terms.text)
+    # print(terms_json['search_terms'])
     search_terms = '\"' + str(terms_json['search_terms']) + '\"'
     config_key = data['config_key']
     env = data['env']

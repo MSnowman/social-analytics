@@ -20,3 +20,12 @@ def create_app(config_name):
     app.register_blueprint(api_blueprint, url_prefix='/streaming_api/v1')
 
     return app
+
+
+
+# {
+#   "user_id": "Snowman",
+#   "analysis_name": "JPM Chase",
+#   "analysis_description": "Everything that is relevant to JPM Chase",
+#   "analysis_terms": {"JPM":["Chase","Today's Snapshot","Today'sSnapshot","JP","JPMorgan","JamieDimon","Dimon"]"}
+# }
