@@ -52,7 +52,6 @@ def get_market_analysis_search_terms(user_id, analysis_name):
     new_terms = set(new_terms)
     search_terms = list(new_terms)
 
-
     data = {'search_terms': search_terms}
     temp_file = json.dumps(data, indent=4)
     search_terms = json_util.loads(temp_file)
