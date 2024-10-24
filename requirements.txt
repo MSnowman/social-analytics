@@ -1,5 +1,5 @@
 pandas
-mysql-connector-python==8.0.16
+mysql-connector-python==9.1.0
 sklearn
 nltk
 pymongo
